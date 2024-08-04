@@ -1,5 +1,6 @@
 package com.example.inventumopus
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -34,39 +35,30 @@ class MainActivity : ComponentActivity() {
 
 
         val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://inventumopusapi.up.railway.app/")
+            .baseUrl("https://nauf.wheredoc.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiInterface::class.java)
 
         val jobsData = retrofitBuilder.getRandomJobs()
-        val randomJobData = retrofitBuilder.getRandomJob()
 
         jobsData.enqueue(object : Callback<Jobs?> {
             override fun onResponse(call: Call<Jobs?>, response: Response<Jobs?>) {
-                var responseBody = response.body()
-                var jobs = responseBody?.jobs!!
+                val responseBody = response.body()
+                val jobs = responseBody?.jobs!!
 
                 jobsAdapter = JobsAdapter(this@MainActivity, jobs)
                 recyclerView.adapter = jobsAdapter
                 recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+
+                jobsAdapter.onItemClick = {
+                    val intent = Intent(this@MainActivity, DetailedActivity::class.java)
+                    intent.putExtra("job", it)
+                    startActivity(intent)
+                }
             }
 
             override fun onFailure(call: Call<Jobs?>, t: Throwable) {
-                println(t.message)
-            }
-        })
-
-
-//        Random Job data handler
-        randomJobData.enqueue(object : Callback<Job?> {
-            override fun onResponse(call: Call<Job?>, response: Response<Job?>) {
-                var responseBody = response.body()
-
-
-            }
-
-            override fun onFailure(call: Call<Job?>, t: Throwable) {
                 println(t.message)
             }
         })

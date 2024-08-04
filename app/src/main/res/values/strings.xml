@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">InventumOpus</string>
+
+    <string name="job_title">Job Title</string>
+    <string name="job_description">Job Description</string>
+    <string name="job_qualification">Job Qualification</string>
+    <string name="job_experience">Experience Required</string>
+    <string name="job_company">Job Company</string>
+    <string name="job_image">JobImage</string>
+
+    <string name="popular">Popular Categories</string>
+    <string name="recent">Recent Listings</string>
+    <string name="welcome">Welcome</string>
+
+    <string name="test">Test</string>
+
+    <string name="apply_button">Apply</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -13,6 +14,8 @@ import org.w3c.dom.Text
 
 class JobsAdapter(val context: Activity, val JobsList: List<Job>) :
     RecyclerView.Adapter<JobsAdapter.JobsViewHolder>() {
+
+    var onItemClick : ((Job) -> Unit)? = null
 
     // If layout manager fails to create a view for some data then this method is used
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobsAdapter.JobsViewHolder {
@@ -29,6 +32,10 @@ class JobsAdapter(val context: Activity, val JobsList: List<Job>) :
 
         // show image
         Picasso.get().load(currentItem.image).into(holder.image)
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(currentItem)
+        }
     }
 
     // returns the total number of job listings
@@ -37,7 +44,7 @@ class JobsAdapter(val context: Activity, val JobsList: List<Job>) :
     }
 
     class JobsViewHolder(jobView : View) : RecyclerView.ViewHolder(jobView) {
-        var image: ShapeableImageView
+        var image: ImageView
         var title: TextView
         var salary: TextView
         var location: TextView

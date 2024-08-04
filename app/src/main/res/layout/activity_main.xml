@@ -18,8 +18,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/eb_garamond"
-                android:text="Welcome"
-                android:textSize="16dp" />
+                android:text="@string/welcome"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:fontFamily="@font/eb_garamond"
                 android:textStyle="bold"
                 android:text="Guest"
-                android:textSize="35dp" />
+                android:textSize="35sp" />
         </LinearLayout>
 
     <TextView
@@ -36,8 +36,8 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
         android:fontFamily="@font/raleway_semibold"
-        android:text="Popular Categories"
-        android:textSize="16dp" />
+        android:text="@string/popular"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="125dp"
@@ -54,6 +54,13 @@
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/test"
+                />
+
         </androidx.cardview.widget.CardView>
 
 
@@ -63,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="30dp"
+        android:layout_marginTop="30dp"
         >
 
         <LinearLayout
@@ -76,8 +83,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/raleway_semibold"
-                android:text="Recent Listings"
-                android:textSize="16dp" />
+                android:text="@string/recent"
+                android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/jobsRecyclerView"
