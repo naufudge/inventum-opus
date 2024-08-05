@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
 
         recyclerView = findViewById(R.id.jobsRecyclerView)
 
-
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://nauf.wheredoc.org/")
             .addConverterFactory(GsonConverterFactory.create())
