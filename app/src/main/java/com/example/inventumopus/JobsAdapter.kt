@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
-import com.squareup.picasso.Picasso
+//import com.squareup.picasso.Picasso
 import org.w3c.dom.Text
 
 
@@ -31,7 +31,7 @@ class JobsAdapter(val context: Activity, val JobsList: List<Job>) :
         holder.location.text = currentItem.location
 
         // show image
-        Picasso.get().load(currentItem.image).into(holder.image)
+//        Picasso.get().load(currentItem.image).into(holder.image)
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(currentItem)

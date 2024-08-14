@@ -1,66 +1,119 @@
 package com.example.inventumopus
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.example.inventumopus.ui.Navigation
 import com.example.inventumopus.ui.theme.InventumOpusTheme
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+
+data class BottomNavigationItem(
+    val title: String,
+    val route: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
+)
 
 class MainActivity : ComponentActivity() {
-    lateinit var recyclerView: RecyclerView
-    lateinit var jobsAdapter: JobsAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {
+            InventumOpusTheme {
+                val navController = rememberNavController()
 
-        recyclerView = findViewById(R.id.jobsRecyclerView)
+                val navItems = listOf(
+                    BottomNavigationItem(
+                        title = "Home",
+                        route = "home",
+                        selectedIcon = Icons.Filled.Home,
+                        unselectedIcon = Icons.Outlined.Home
+                    ),
+                    BottomNavigationItem(
+                        title = "Search",
+                        route = "search",
+                        selectedIcon = Icons.Filled.Search,
+                        unselectedIcon = Icons.Outlined.Search
+                    ),
+                    BottomNavigationItem(
+                        title = "Profile",
+                        route = "profile",
+                        selectedIcon = Icons.Filled.Person,
+                        unselectedIcon = Icons.Outlined.Person
+                    )
+                )
 
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://nauf.wheredoc.org/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiInterface::class.java)
-
-        val jobsData = retrofitBuilder.getRandomJobs()
-
-        jobsData.enqueue(object : Callback<Jobs?> {
-            override fun onResponse(call: Call<Jobs?>, response: Response<Jobs?>) {
-                val responseBody = response.body()
-                val jobs = responseBody?.jobs!!
-
-                jobsAdapter = JobsAdapter(this@MainActivity, jobs)
-                recyclerView.adapter = jobsAdapter
-                recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-
-                jobsAdapter.onItemClick = {
-                    val intent = Intent(this@MainActivity, DetailedActivity::class.java)
-                    intent.putExtra("job", it)
-                    startActivity(intent)
+                var selectedItemIndex by rememberSaveable {
+                    mutableStateOf(0)
                 }
-            }
 
-            override fun onFailure(call: Call<Jobs?>, t: Throwable) {
-                println(t.message)
+                Surface {
+                    Scaffold (
+                        modifier = Modifier,
+                        bottomBar = {
+                            NavigationBar (
+                                modifier = Modifier
+                                    .shadow(20.dp, shape = RoundedCornerShape(0.dp))
+                                    .graphicsLayer {
+                                        shadowElevation = 20.dp.toPx()
+                                        shape = RoundedCornerShape(0.dp)
+                                        clip = true
+                                    }
+                            ) {
+                                navItems.forEachIndexed { index, item ->
+                                    NavigationBarItem(
+                                        selected = selectedItemIndex == index,
+                                        onClick = {
+                                            selectedItemIndex = index
+                                            navController.navigate(item.route)
+                                        },
+                                        label = {
+                                            Text(text = item.title)
+                                        },
+                                        icon = {
+                                            Icon(
+                                                imageVector = if(index == selectedItemIndex) {
+                                                    item.selectedIcon
+                                                } else item.unselectedIcon,
+                                                contentDescription = item.title)
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    ) { innerPadding ->
+                        Navigation(
+                            modifier = Modifier.padding(innerPadding),
+                            navController = navController
+                        )
+                    }
+                }
+
             }
-        })
+        }
     }
 }
 

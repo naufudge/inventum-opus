@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Job(
-    val _id: String,
+    val _id: Int,
     val category: String,
     val company: String,
     val deadline: String,
@@ -18,7 +18,7 @@ data class Job(
     val type: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
+        parcel.readInt(),
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -34,7 +34,7 @@ data class Job(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(_id)
+        parcel.writeInt(_id)
         parcel.writeString(category)
         parcel.writeString(company)
         parcel.writeString(deadline)
@@ -46,6 +46,19 @@ data class Job(
         parcel.writeString(qualification)
         parcel.writeString(salary)
         parcel.writeString(type)
+    }
+
+    fun doesMatchSearchQuery(query: String): Boolean {
+        val matchingCombinations = listOf(
+            name,
+            company,
+            location
+        )
+        val result = matchingCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+
+        return result
     }
 
     override fun describeContents(): Int {

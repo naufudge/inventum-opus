@@ -31,6 +31,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -38,9 +39,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -77,5 +75,7 @@ dependencies {
     implementation(libs.converterGson)
     implementation(libs.recyclerview)
     implementation(libs.material)
-    implementation(libs.picasso)
+    implementation(libs.googleFonts)
+    implementation(libs.navigationCompose)
+    implementation(libs.coil)
 }

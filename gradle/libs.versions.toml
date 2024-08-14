@@ -27,7 +27,7 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.1" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
@@ -38,6 +38,10 @@ material = { group = "com.google.android.material", name = "material", version="
 picasso = { group = "com.squareup.picasso", name = "picasso", version = "2.8" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+navigationCompose = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.7" }
+coil = { group = "io.coil-kt", name = "coil-compose", version = "2.7.0" }
+googleFonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version = "1.6.8" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
