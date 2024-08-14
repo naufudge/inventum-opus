@@ -1,6 +1,5 @@
 package com.example.inventumopus.api
 
-import com.example.inventumopus.ApiInterface
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
