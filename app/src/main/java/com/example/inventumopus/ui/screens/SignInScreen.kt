@@ -1,5 +1,6 @@
 package com.example.inventumopus.ui.screens
 
+import InformationModal
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +44,15 @@ fun SignInScreen (
     navHostController: NavHostController,
     viewModel: HomeViewModel
 ) {
-    val signInStatus = viewModel.signedIn
+    val isLoggedIn by viewModel.signedIn.collectAsState()
+    val currentUser = viewModel.currentUser
+
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    var showDialog by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf("") }
+    var dialogTitle by remember { mutableStateOf("") }
 
     Column (
         modifier = Modifier.fillMaxSize(),
@@ -70,8 +80,8 @@ fun SignInScreen (
                 color = Color.DarkGray
                 )
             SignInFields(
-                query = "",
-                onQueryChange = {},
+                query = username,
+                onQueryChange = { username = it },
                 leadingIcon = Icons.Default.Person,
                 placeholderText = "Username"
             )
@@ -87,8 +97,8 @@ fun SignInScreen (
                 color = Color.DarkGray
             )
             SignInFields(
-                query = "",
-                onQueryChange = {},
+                query = password,
+                onQueryChange = { password = it },
                 leadingIcon = Icons.Default.Warning,
                 placeholderText = "Password",
                 visualTransformation = PasswordVisualTransformation()
@@ -98,8 +108,18 @@ fun SignInScreen (
 
         OutlinedButton(
             onClick = {
-                viewModel.setSignInStatus(true)
-                navHostController.navigate("profile")
+                viewModel.getUser(username)
+                if (currentUser != null) {
+                    if (currentUser.username == username && currentUser.password == password) {
+                        viewModel.setSignInStatus(true)
+                    } else {
+                        dialogTitle = "Login Failed!"
+                        message = "Username or Password is incorrect"
+                        showDialog = true
+                    }
+                }
+//                viewModel.setSignInStatus(true)
+//                navHostController.navigate("profile")
             }) {
             Text(
                 text = "Sign In",
@@ -107,6 +127,12 @@ fun SignInScreen (
                 color = Color.DarkGray
             )
         }
+        InformationModal(
+            showDialog = showDialog,
+            onDismiss = { showDialog = false },
+            message = message,
+            title = dialogTitle
+            )
     }
 }
 

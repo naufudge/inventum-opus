@@ -1,4 +1,4 @@
-package com.example.inventumopus
+package com.example.inventumopus.datamodels
 
 import android.os.Parcel
 import android.os.Parcelable

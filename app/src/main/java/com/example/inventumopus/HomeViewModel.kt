@@ -6,6 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventumopus.api.RetrofitInstance
+import com.example.inventumopus.datamodels.Job
+import com.example.inventumopus.datamodels.Jobs
+import com.example.inventumopus.datamodels.User
+import com.example.inventumopus.datamodels.UserCreation
+import com.example.inventumopus.datamodels.UserCreationResponse
+import com.example.inventumopus.datamodels.Username
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +48,6 @@ class HomeViewModel: ViewModel() {
             } else {
                 jobs.filter {
                     it.doesMatchSearchQuery(text)
-                    // it.name.contains(text, ignoreCase = true)
                 }
             }
         }
@@ -51,8 +57,11 @@ class HomeViewModel: ViewModel() {
             _allJobsData.value
         )
 
-    private val _signedIn = MutableStateFlow(false)
+    private val _signedIn = MutableStateFlow(true)
     val signedIn = _signedIn.asStateFlow()
+
+    var currentUser by mutableStateOf<User?>(value = null)
+        private set
 
     init {
         getJobsData()
@@ -125,6 +134,51 @@ class HomeViewModel: ViewModel() {
         }
     }
 
+    // Function to create a user
+    fun createUser(
+        user: UserCreation
+    ) {
+        viewModelScope.launch {
+            val call: Call<UserCreationResponse> = RetrofitInstance.apiService.createUser(user)
+            call.enqueue(object: Callback<UserCreationResponse> {
+                override fun onResponse(call: Call<UserCreationResponse>, response: Response<UserCreationResponse>) {
+                    if (response.isSuccessful) {
+                        setSignInStatus(true)
+                        getUser(user.username)
+
+                        println("Created User Successfully!")
+                    } else {
+                        println("There was an error when creating the user.")
+                    }
+                }
+                override fun onFailure(call: Call<UserCreationResponse>, t: Throwable) {
+                    println("Failed to create user!")
+                }
+            })
+        }
+    }
+
+    // Function to get a user's details
+    fun getUser(
+        username: String
+    ) {
+        viewModelScope.launch {
+            val call: Call<User> = RetrofitInstance.apiService.getUserByUsername(username)
+            call.enqueue(object: Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful) {
+                        // handle successful get_user request
+                        currentUser = response.body()
+                    } else {
+                        println("There was an error when getting user.")
+                    }
+                }
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    println("Failed to get user")
+                }
+            })
+        }
+    }
 }
 
 

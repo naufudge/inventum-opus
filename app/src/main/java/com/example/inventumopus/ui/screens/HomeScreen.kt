@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.inventumopus.HomeViewModel
-import com.example.inventumopus.Job
+import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.R
 import com.example.inventumopus.ui.GoogleFonts
 import com.example.inventumopus.ui.components.JobListingCard

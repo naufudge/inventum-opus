@@ -27,7 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.inventumopus.HomeViewModel
-import com.example.inventumopus.Job
+import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.ui.GoogleFonts
 
 @Composable
