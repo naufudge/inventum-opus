@@ -29,6 +29,7 @@ import coil.size.Size
 import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.ui.GoogleFonts
+import com.example.inventumopus.ui.screens.prata
 
 @Composable
 fun JobListingCard (
@@ -85,7 +86,7 @@ fun JobListingCard (
                     .fillMaxWidth()
             ) {
                 Text(
-                    fontFamily = FontFamily.Serif,
+                    fontFamily = prata,
                     fontSize = 12.sp,
                     text = jobItem.name,
                     fontWeight = FontWeight.Bold
