@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -119,7 +118,7 @@ fun ProfileScreen (
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text (
-                        text= "Zenitsu",
+                        text= currentUser?.username!!,
                         fontFamily = poppins,
                         fontWeight = FontWeight.W600,
                         fontSize = 20.sp,
@@ -186,7 +185,9 @@ fun ProfileScreen (
                                 fontWeight = FontWeight.W700,
                                 color = Color.DarkGray
                             )
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = {
+                                showQualDialog = true
+                            }) {
                                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Experience")
                             }
                         }
@@ -196,11 +197,11 @@ fun ProfileScreen (
                             text = "Thunder Breathing First Form",
                             color = Color.Gray,
                         )
-//                        DatePicker(state = )
                     }
                 }
             }
             AddExperienceDialog(showDialog = showExpDialog, onDismiss = { showExpDialog = false })
+            AddQualificationDialog(showDialog = showQualDialog, onDismiss = { showQualDialog = false })
         } else {
             LoggedOutScreen(navHostController)
         }
@@ -265,9 +266,7 @@ fun LoggedOutScreen(
                 )
             }
         }
-
     }
-
 }
 
 @Composable
@@ -350,7 +349,91 @@ fun AddExperienceDialog(
                         Text(text = "Submit", fontFamily = raleway)
                     }
                 }
+            }
+        }
+    }
+}
 
+@Composable
+fun AddQualificationDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+) {
+    var school by remember { mutableStateOf("") }
+    var degree by remember { mutableStateOf("") }
+    var field by remember { mutableStateOf("") }
+
+    val formLabelModifier = Modifier.padding(start = 8.dp, bottom = 5.dp)
+
+    if (showDialog) {
+        Dialog(onDismissRequest = onDismiss) {
+            Surface (
+                shape = MaterialTheme.shapes.medium,
+                shadowElevation = 8.dp
+            ) {
+                Column (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, bottom = 30.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row (
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        IconButton(onClick = onDismiss) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "close")
+                        }
+                    }
+                    Text(
+                        text = "Add Qualification",
+                        fontFamily = poppins,
+                        fontWeight = FontWeight.W700,
+                        fontSize = 18.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(25.dp))
+
+                    // Name of School Field
+                    val name = "Name of School"
+                    Column {
+                        OutlinedTextField(
+                            value = school,
+                            onValueChange = { school = it },
+                            label = { Text(text = name, fontFamily = raleway) }
+                        )
+                    }
+
+                    // Field of Education Field
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Column {
+                        OutlinedTextField(
+                            value = field,
+                            onValueChange = { field = it },
+                            label = { Text(text = "Field of Education", fontFamily = raleway) }
+                        )
+                    }
+
+                    // Degree of Qualification Field
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Column {
+                        OutlinedTextField(
+                            value = degree,
+                            onValueChange = { degree = it },
+                            label = { Text(text = "Degree of Qualification", fontFamily = raleway) }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Button(onClick = {
+                        // submit qualification
+
+                    }) {
+                        Text(text = "Submit", fontFamily = raleway)
+                    }
+                }
             }
         }
     }

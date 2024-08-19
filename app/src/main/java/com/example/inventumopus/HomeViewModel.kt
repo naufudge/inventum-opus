@@ -57,7 +57,7 @@ class HomeViewModel: ViewModel() {
             _allJobsData.value
         )
 
-    private val _signedIn = MutableStateFlow(true)
+    private val _signedIn = MutableStateFlow(false)
     val signedIn = _signedIn.asStateFlow()
 
     var currentUser by mutableStateOf<User?>(value = null)
@@ -84,7 +84,6 @@ class HomeViewModel: ViewModel() {
     fun setSignInStatus(status: Boolean) {
         viewModelScope.launch {
             _signedIn.value = status
-            println(status)
         }
     }
 

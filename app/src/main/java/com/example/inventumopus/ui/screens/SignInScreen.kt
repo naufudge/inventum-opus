@@ -54,85 +54,88 @@ fun SignInScreen (
     var message by remember { mutableStateOf("") }
     var dialogTitle by remember { mutableStateOf("") }
 
-    Column (
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Sign In",
-            fontFamily = prata,
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp
-        )
-
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp)
+    if (isLoggedIn) {
+        navHostController.navigate("profile")
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Username
-            Text(
-                text = "Username",
-                fontFamily = raleway,
-                fontSize = 13.sp,
-                textAlign = TextAlign.Left,
-                color = Color.DarkGray
-                )
-            SignInFields(
-                query = username,
-                onQueryChange = { username = it },
-                leadingIcon = Icons.Default.Person,
-                placeholderText = "Username"
-            )
-
-            Spacer(modifier = Modifier.height(25.dp))
-
-            // Password
-            Text(
-                text = "Password",
-                fontFamily = raleway,
-                fontSize = 13.sp,
-                textAlign = TextAlign.Left,
-                color = Color.DarkGray
-            )
-            SignInFields(
-                query = password,
-                onQueryChange = { password = it },
-                leadingIcon = Icons.Default.Warning,
-                placeholderText = "Password",
-                visualTransformation = PasswordVisualTransformation()
-            )
-        }
-        Spacer(modifier = Modifier.height(25.dp))
-
-        OutlinedButton(
-            onClick = {
-                viewModel.getUser(username)
-                if (currentUser != null) {
-                    if (currentUser.username == username && currentUser.password == password) {
-                        viewModel.setSignInStatus(true)
-                    } else {
-                        dialogTitle = "Login Failed!"
-                        message = "Username or Password is incorrect"
-                        showDialog = true
-                    }
-                }
-//                viewModel.setSignInStatus(true)
-//                navHostController.navigate("profile")
-            }) {
             Text(
                 text = "Sign In",
-                fontFamily = poppins,
-                color = Color.DarkGray
+                fontFamily = prata,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp)
+            ) {
+                // Username
+                Text(
+                    text = "Username",
+                    fontFamily = raleway,
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Left,
+                    color = Color.DarkGray
+                )
+                SignInFields(
+                    query = username,
+                    onQueryChange = { username = it },
+                    leadingIcon = Icons.Default.Person,
+                    placeholderText = "Username"
+                )
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                // Password
+                Text(
+                    text = "Password",
+                    fontFamily = raleway,
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Left,
+                    color = Color.DarkGray
+                )
+                SignInFields(
+                    query = password,
+                    onQueryChange = { password = it },
+                    leadingIcon = Icons.Default.Warning,
+                    placeholderText = "Password",
+                    visualTransformation = PasswordVisualTransformation()
+                )
+            }
+            Spacer(modifier = Modifier.height(25.dp))
+
+            OutlinedButton(
+                onClick = {
+                    viewModel.getUser(username)
+                    if (currentUser != null) {
+                        if (currentUser.username == username && currentUser.password == password) {
+                            viewModel.setSignInStatus(true)
+                        } else {
+                            dialogTitle = "Login Failed!"
+                            message = "Username or Password is incorrect"
+                            showDialog = true
+                        }
+                    }
+//                navHostController.navigate("profile")
+                }) {
+                Text(
+                    text = "Sign In",
+                    fontFamily = poppins,
+                    color = Color.DarkGray
+                )
+            }
+            InformationModal(
+                showDialog = showDialog,
+                onDismiss = { showDialog = false },
+                message = message,
+                title = dialogTitle
             )
         }
-        InformationModal(
-            showDialog = showDialog,
-            onDismiss = { showDialog = false },
-            message = message,
-            title = dialogTitle
-            )
     }
 }
 
