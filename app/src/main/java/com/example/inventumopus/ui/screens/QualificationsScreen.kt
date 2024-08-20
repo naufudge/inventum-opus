@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -75,19 +78,36 @@ fun QualificationsScreen(
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add_experience")
             }
         }
+
+        // Qualifications list
+        LazyColumn (
+            modifier = Modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            itemsIndexed(currentUser?.qualifications!!) { _, qualification ->
+                Card {
+                    Text(text = qualification.degree)
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+
         AddQualificationDialog(
             showDialog = showQualDialog,
-            school_ = school,
-            degree_ = degree,
-            field_ = field,
-            handleSubmit = {viewModel.addQualification(
-                Qualification(
-                    username = currentUser?.username!!,
-                    school = school,
-                    field = field,
-                    degree = degree
+            schoolQuery = school,
+            degreeQuery = degree,
+            fieldQuery = field,
+            handleSubmit = {
+                viewModel.addQualification(
+                    Qualification(
+                        username = currentUser?.username!!,
+                        school = school,
+                        field = field,
+                        degree = degree
+                    )
                 )
-            )},
+                println("Submit button clicked!")
+            },
             onDismiss = { showQualDialog = false }
         )
     }
@@ -96,16 +116,16 @@ fun QualificationsScreen(
 @Composable
 fun AddQualificationDialog(
     showDialog: Boolean,
-    school_: String,
-    degree_: String,
-    field_: String,
+    schoolQuery: String,
+    degreeQuery: String,
+    fieldQuery: String,
     handleSubmit: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     val formLabelModifier = Modifier.padding(start = 8.dp, bottom = 5.dp)
-    var school by remember { mutableStateOf(school_) }
-    var degree by remember { mutableStateOf(degree_) }
-    var field by remember { mutableStateOf(field_) }
+    var school by remember { mutableStateOf(schoolQuery) }
+    var degree by remember { mutableStateOf(degreeQuery) }
+    var field by remember { mutableStateOf(fieldQuery) }
 
     if (showDialog) {
         Dialog(onDismissRequest = onDismiss) {
@@ -169,7 +189,9 @@ fun AddQualificationDialog(
                     }
 
                     Spacer(modifier = Modifier.height(25.dp))
-                    Button(onClick = handleSubmit) {
+                    Button(onClick = {
+
+                    }) {
                         Text(text = "Submit", fontFamily = raleway)
                     }
                 }

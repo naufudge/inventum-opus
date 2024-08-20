@@ -32,11 +32,6 @@ fun SearchScreen(
     val searchText by viewModel.searchText.collectAsState()
     val jobs by viewModel.jobs.collectAsState()
 
-
-    val font = GoogleFonts()
-    val poppins = font.Poppins
-    val prata = font.Prata
-
     Column (
         modifier = Modifier
             .padding(
@@ -68,7 +63,6 @@ fun SearchScreen(
     }
 }
 
-
 @Composable
 fun SearchBar(
     query: String,
@@ -76,9 +70,6 @@ fun SearchBar(
     modifier: Modifier = Modifier
 ) {
     var text by remember { mutableStateOf(query) }
-
-    val font = GoogleFonts()
-    val raleway = font.Raleway
 
     OutlinedTextField(
         value = text,
