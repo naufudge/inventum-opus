@@ -4,6 +4,8 @@ import com.example.inventumopus.datamodels.Experience
 import com.example.inventumopus.datamodels.ExperienceResponse
 import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.datamodels.Jobs
+import com.example.inventumopus.datamodels.Qualification
+import com.example.inventumopus.datamodels.QualificationResponse
 import com.example.inventumopus.datamodels.User
 import com.example.inventumopus.datamodels.UserCreation
 import com.example.inventumopus.datamodels.UserCreationResponse
@@ -33,6 +35,6 @@ interface ApiInterface {
     @POST("add_experience")
     fun addExperience(@Body data: Experience): Call<ExperienceResponse>
 
-    @POST("get_user")
-    fun getUser(@Body username: Username): Call<User>
+    @POST("add_qualifications")
+    fun addQualification(@Body data: Qualification): Call<QualificationResponse>
 }

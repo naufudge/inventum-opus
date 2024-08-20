@@ -1,5 +1,6 @@
 package com.example.inventumopus.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,9 +36,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -46,6 +51,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.inventumopus.HomeViewModel
+import com.example.inventumopus.R
 
 
 @Composable
@@ -55,9 +61,6 @@ fun ProfileScreen (
 ) {
     val isLoggedIn by viewModel.signedIn.collectAsState()
     val currentUser = viewModel.currentUser
-    
-    var showExpDialog by remember { mutableStateOf(false) }
-    var showQualDialog by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
@@ -71,12 +74,6 @@ fun ProfileScreen (
             .verticalScroll(rememberScrollState()),
     ) {
         if (isLoggedIn) {
-//            Text(
-//                text = "User Profile",
-//                fontFamily = prata,
-//                fontWeight = FontWeight.Bold,
-//                fontSize = 20.sp,
-//            )
             
             // Settings button
             Row (
@@ -126,85 +123,97 @@ fun ProfileScreen (
                     )
                 }
 
-                // Can make this a lazy row of cards?...
-                // Experience
-                Card (
+                // First row of cards
+                Row (
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 15.dp)
+                        .padding(top = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column (modifier = Modifier.padding(10.dp)) {
-                        Row (
-                            modifier = Modifier
-                                .padding(end = 10.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp, vertical = 4.dp),
-                                text = "Past Experiences",
-                                fontFamily = poppins,
-                                fontWeight = FontWeight.W700,
-                                color = Color.DarkGray
-                            )
-                            IconButton(onClick = { 
-                                showExpDialog = true
-                            }) {
-                                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Experience")
-                            }
+                    // Experience
+                    ProfileCard(
+                        text = "Experience",
+                        icon = R.drawable.work_bag_svgrepo_com,
+                        onClick = {
+                            navHostController.navigate("experience")
                         }
-                        
-                        Text(
-                            modifier = Modifier.padding(5.dp),
-                            text = "Demon Slaying",
-                            color = Color.Gray,
-                        )
-                    }
+                    )
+
+                    // Qualifications
+                    ProfileCard(
+                        text = "Qualifications",
+                        icon = R.drawable.graduate,
+                        width = 28.dp,
+                        onClick = {
+                            navHostController.navigate("qualifications")
+                        }
+                    )
                 }
-                
-                // Qualifications
-                Card (
+
+                // Second row of cards
+                Row (
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 15.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column (modifier = Modifier.padding(10.dp)) {
-                        Row (
-                            modifier = Modifier
-                                .padding(end = 10.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
-                                text = "Education",
-                                fontFamily = poppins,
-                                fontWeight = FontWeight.W700,
-                                color = Color.DarkGray
-                            )
-                            IconButton(onClick = {
-                                showQualDialog = true
-                            }) {
-                                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Experience")
-                            }
-                        }
-                        
-                        Text(
-                            modifier = Modifier.padding(5.dp),
-                            text = "Thunder Breathing First Form",
-                            color = Color.Gray,
-                        )
-                    }
+                   // Bookmarks
+                    ProfileCard(
+                        text = "Bookmarks",
+                        icon = R.drawable.bookmarks,
+                        onClick = {}
+                    )
+
+                    // Applied Jobs
+                    ProfileCard(
+                        text = "Applied Jobs",
+                        icon = R.drawable.pen_and_paper_svgrepo_com,
+                        width = 25.dp,
+                        onClick = {}
+                    )
                 }
             }
-            AddExperienceDialog(showDialog = showExpDialog, onDismiss = { showExpDialog = false })
-            AddQualificationDialog(showDialog = showQualDialog, onDismiss = { showQualDialog = false })
         } else {
             LoggedOutScreen(navHostController)
         }
+    }
+}
+
+@Composable
+fun ProfileCard(
+    text: String,
+    icon: Int,
+    onClick: () -> Unit,
+    width: Dp = 20.dp
+) {
+    Card(
+        modifier = Modifier
+            .padding(vertical = 15.dp),
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier
+                .width(170.dp)
+                .height(75.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painterResource(id = icon),
+                modifier = Modifier
+                    .padding(end = 15.dp)
+                    .width(width),
+                contentDescription = "Work",
+                contentScale = ContentScale.Fit
+            )
+            Text(
+                text = text,
+                fontFamily = poppins,
+                fontWeight = FontWeight.Thin,
+                color = Color.DarkGray,
+                fontSize = 14.sp
+            )
+        }
+
     }
 }
 
@@ -264,176 +273,6 @@ fun LoggedOutScreen(
                     fontFamily = poppins,
                     color = Color.DarkGray
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun AddExperienceDialog(
-    showDialog: Boolean,
-    onDismiss: () -> Unit,
-) {
-    var jobTitle by remember { mutableStateOf("") }
-    var jobCompany by remember { mutableStateOf("") }
-    var jobResponsibilities by remember { mutableStateOf("") }
-
-    val formLabelModifier = Modifier.padding(start = 8.dp, bottom = 5.dp)
-
-    if (showDialog) {
-        Dialog(onDismissRequest = onDismiss) {
-            Surface (
-                shape = MaterialTheme.shapes.medium,
-                shadowElevation = 8.dp
-            ) {
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, bottom = 30.dp, end = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row (
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        IconButton(onClick = onDismiss) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "close")
-                        }
-                    }
-                    Text(
-                        text = "Add Experience",
-                        fontFamily = poppins,
-                        fontWeight = FontWeight.W700,
-                        fontSize = 18.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(25.dp))
-                    // Job Title Field
-                    Column {
-                        OutlinedTextField(
-                            value = jobTitle,
-                            onValueChange = { jobTitle = it },
-                            label = { Text(text = "Job Title", fontFamily = raleway) }
-                        )
-                    }
-
-                    // Company Name Field
-                    Spacer(modifier = Modifier.height(25.dp))
-                    val company = "Company Name"
-                    Column {
-                        OutlinedTextField(
-                            value = jobCompany,
-                            onValueChange = { jobCompany = it },
-                            label = { Text(text = company, fontFamily = raleway) }
-                        )
-                    }
-
-                    // Responsibilities
-                    Spacer(modifier = Modifier.height(25.dp))
-                    val responsibility = "Responsibilities"
-                    Column {
-                        OutlinedTextField(
-                            value = jobResponsibilities,
-                            onValueChange = { jobResponsibilities = it },
-                            label = { Text(text = responsibility, fontFamily = raleway) }
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Button(onClick = {
-                        // submit experience
-
-                    }) {
-                        Text(text = "Submit", fontFamily = raleway)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun AddQualificationDialog(
-    showDialog: Boolean,
-    onDismiss: () -> Unit,
-) {
-    var school by remember { mutableStateOf("") }
-    var degree by remember { mutableStateOf("") }
-    var field by remember { mutableStateOf("") }
-
-    val formLabelModifier = Modifier.padding(start = 8.dp, bottom = 5.dp)
-
-    if (showDialog) {
-        Dialog(onDismissRequest = onDismiss) {
-            Surface (
-                shape = MaterialTheme.shapes.medium,
-                shadowElevation = 8.dp
-            ) {
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, bottom = 30.dp, end = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row (
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        IconButton(onClick = onDismiss) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "close")
-                        }
-                    }
-                    Text(
-                        text = "Add Qualification",
-                        fontFamily = poppins,
-                        fontWeight = FontWeight.W700,
-                        fontSize = 18.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    // Name of School Field
-                    val name = "Name of School"
-                    Column {
-                        OutlinedTextField(
-                            value = school,
-                            onValueChange = { school = it },
-                            label = { Text(text = name, fontFamily = raleway) }
-                        )
-                    }
-
-                    // Field of Education Field
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Column {
-                        OutlinedTextField(
-                            value = field,
-                            onValueChange = { field = it },
-                            label = { Text(text = "Field of Education", fontFamily = raleway) }
-                        )
-                    }
-
-                    // Degree of Qualification Field
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Column {
-                        OutlinedTextField(
-                            value = degree,
-                            onValueChange = { degree = it },
-                            label = { Text(text = "Degree of Qualification", fontFamily = raleway) }
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Button(onClick = {
-                        // submit qualification
-
-                    }) {
-                        Text(text = "Submit", fontFamily = raleway)
-                    }
-                }
             }
         }
     }

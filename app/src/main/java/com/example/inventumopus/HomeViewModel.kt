@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.inventumopus.api.RetrofitInstance
 import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.datamodels.Jobs
+import com.example.inventumopus.datamodels.Qualification
+import com.example.inventumopus.datamodels.QualificationResponse
 import com.example.inventumopus.datamodels.User
 import com.example.inventumopus.datamodels.UserCreation
 import com.example.inventumopus.datamodels.UserCreationResponse
@@ -176,6 +178,29 @@ class HomeViewModel: ViewModel() {
                     println("Failed to get user")
                 }
             })
+        }
+    }
+
+    // Function to add a user's qualification
+    fun addQualification(
+        qualification: Qualification
+    ) {
+        viewModelScope.launch {
+            val call: Call<QualificationResponse> = RetrofitInstance.apiService.addQualification(qualification)
+            call.enqueue(object: Callback<QualificationResponse> {
+                override fun onResponse(
+                    call: Call<QualificationResponse>,
+                    response: Response<QualificationResponse>
+                ) {
+                    getUser(qualification.username)
+                    println("Added user qualification")
+                }
+
+                override fun onFailure(call: Call<QualificationResponse>, t: Throwable) {
+                    println("Failed to add user qualification")
+                }
+            })
+
         }
     }
 }
