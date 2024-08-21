@@ -1,5 +1,6 @@
 package com.example.inventumopus.ui.screens
 
+import InformationModal
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -94,20 +95,7 @@ fun QualificationsScreen(
 
         AddQualificationDialog(
             showDialog = showQualDialog,
-            schoolQuery = school,
-            degreeQuery = degree,
-            fieldQuery = field,
-            handleSubmit = {
-                viewModel.addQualification(
-                    Qualification(
-                        username = currentUser?.username!!,
-                        school = school,
-                        field = field,
-                        degree = degree
-                    )
-                )
-                println("Submit button clicked!")
-            },
+            viewModel = viewModel,
             onDismiss = { showQualDialog = false }
         )
     }
@@ -116,16 +104,16 @@ fun QualificationsScreen(
 @Composable
 fun AddQualificationDialog(
     showDialog: Boolean,
-    schoolQuery: String,
-    degreeQuery: String,
-    fieldQuery: String,
-    handleSubmit: () -> Unit,
-    onDismiss: () -> Unit,
+    viewModel: HomeViewModel,
+    onDismiss: () -> Unit
 ) {
-    val formLabelModifier = Modifier.padding(start = 8.dp, bottom = 5.dp)
-    var school by remember { mutableStateOf(schoolQuery) }
-    var degree by remember { mutableStateOf(degreeQuery) }
-    var field by remember { mutableStateOf(fieldQuery) }
+    var school by remember { mutableStateOf("") }
+    var degree by remember { mutableStateOf("") }
+    var field by remember { mutableStateOf("") }
+
+    var infoDialogTitle by remember { mutableStateOf("") }
+    var infoDialogMsg by remember { mutableStateOf("") }
+    var showInfoDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
         Dialog(onDismissRequest = onDismiss) {
@@ -190,12 +178,38 @@ fun AddQualificationDialog(
 
                     Spacer(modifier = Modifier.height(25.dp))
                     Button(onClick = {
+                        if (school != "" && field != "" && degree != "") {
+                            viewModel.addQualification(
+                                Qualification(
+                                    username = viewModel.currentUser?.username!!,
+                                    school = school,
+                                    field = field,
+                                    degree = degree
+                                )
+                            )
+                            school = ""
+                            field = ""
+                            degree = ""
 
+                            infoDialogTitle = "Success"
+                            infoDialogMsg = "Successfully added qualification!"
+                            showInfoDialog = true
+                        } else {
+                            infoDialogTitle = "Error"
+                            infoDialogMsg = "Please fill all the fields!"
+                            showInfoDialog = true
+                        }
                     }) {
                         Text(text = "Submit", fontFamily = raleway)
                     }
                 }
             }
         }
+        InformationModal(
+            showDialog = showInfoDialog,
+            onDismiss = { showInfoDialog = false },
+            message = infoDialogMsg,
+            title = infoDialogTitle
+        )
     }
 }
