@@ -17,12 +17,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,14 +40,14 @@ val prata = font.Prata
 val poppins = font.Poppins
 val raleway = font.Raleway
 
-sealed class Category(val title: String, icon: Int) {
-    data object Accounting: Category(title = "Accounting", icon = R.drawable.baseline_notifications_24)
-    data object Software: Category(title = "Software", icon = R.drawable.baseline_notifications_24)
-    data object Medical: Category(title = "Medical", icon = R.drawable.baseline_notifications_24)
-    data object Teaching: Category(title = "Teaching", icon = R.drawable.baseline_notifications_24)
-    data object Hardware: Category(title = "Hardware", icon = R.drawable.baseline_notifications_24)
-    data object Carpentry: Category(title = "Carpentry", icon = R.drawable.baseline_notifications_24)
-    data object Administration: Category(title = "Administration", icon = R.drawable.baseline_notifications_24)
+sealed class Category(val title: String, val icon: Int) {
+    data object Accounting: Category(title = "Accounting", icon = R.drawable.accounting)
+    data object Software: Category(title = "Software", icon = R.drawable.software)
+    data object Medical: Category(title = "Medical", icon = R.drawable.medical)
+    data object Teaching: Category(title = "Teaching", icon = R.drawable.teaching)
+    data object Hardware: Category(title = "Hardware", icon = R.drawable.tools)
+    data object Carpentry: Category(title = "Carpentry", icon = R.drawable.carpentry)
+    data object Administration: Category(title = "Administration", icon = R.drawable.administration)
 }
 
 @Composable
@@ -58,6 +60,7 @@ fun HomeScreen (
     val isLoggedIn by viewModel.signedIn.collectAsState()
 
     val exampleCategories = listOf("Accounting", "Software", "Medical", "Teaching", "Hardware", "Carpentry", "Administrative")
+    val categories = listOf(Category.Accounting, Category.Software, Category.Medical, Category.Teaching, Category.Hardware, Category.Carpentry, Category.Administration)
 
     Column (
         modifier = Modifier
@@ -78,6 +81,7 @@ fun HomeScreen (
                     text = "Welcome,",
                     fontFamily = raleway
                 )
+                // Displays username if logged in, else display "Guest"
                 if (isLoggedIn) {
                     Text (
                         text = user?.username!!.uppercase(),
@@ -109,7 +113,7 @@ fun HomeScreen (
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
-            PopularCategories(categories = exampleCategories)
+            PopularCategories(categories = categories)
         }
 
         // Recent Listings
@@ -131,19 +135,19 @@ fun HomeScreen (
 
 @Composable
 fun PopularCategories(
-    categories: List<String>
+    categories: List<Category>
 ) {
-    LazyRow () {
+    LazyRow {
         itemsIndexed(categories) { _, category ->
             Spacer(modifier = Modifier.width(10.dp))
-            PopularCategoryCard(name = category)
+            PopularCategoryCard(item = category)
             Spacer(modifier = Modifier.width(10.dp))
         }
     }
 }
 
 @Composable
-fun PopularCategoryCard(name: String) {
+fun PopularCategoryCard(item: Category) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
@@ -159,8 +163,14 @@ fun PopularCategoryCard(name: String) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Icon(
+                modifier = Modifier.size(50.dp),
+                painter = painterResource(item.icon),
+                contentDescription = item.title
+            )
+            Spacer(Modifier.height(8.dp))
             Text(
-                text = name,
+                text = item.title,
                 fontSize = 13.sp,
             )
         }

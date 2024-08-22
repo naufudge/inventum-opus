@@ -80,7 +80,7 @@ fun SignInScreen (
                     fontFamily = raleway,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Left,
-                    color = Color.DarkGray
+//                    color = Color.DarkGray
                 )
                 SignInFields(
                     query = username,
@@ -97,7 +97,7 @@ fun SignInScreen (
                     fontFamily = raleway,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Left,
-                    color = Color.DarkGray
+//                    color = Color.DarkGray
                 )
                 SignInFields(
                     query = password,
@@ -126,7 +126,7 @@ fun SignInScreen (
                 Text(
                     text = "Sign In",
                     fontFamily = poppins,
-                    color = Color.DarkGray
+//                    color = Color.DarkGray
                 )
             }
             InformationModal(

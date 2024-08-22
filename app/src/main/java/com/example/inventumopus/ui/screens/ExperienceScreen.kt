@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.inventumopus.HomeViewModel
+import com.example.inventumopus.datamodels.Experience
 
 @Composable
 fun ExperienceScreen(
@@ -171,6 +172,7 @@ fun AddExperienceDialog(
     viewModel: HomeViewModel,
     onDismiss: () -> Unit,
 ) {
+    val user = viewModel.currentUser
     var jobTitle by remember { mutableStateOf("") }
     var jobCompany by remember { mutableStateOf("") }
     var jobYears by remember { mutableStateOf("") }
@@ -219,12 +221,11 @@ fun AddExperienceDialog(
 
                     // Company Name Field
                     Spacer(modifier = Modifier.height(25.dp))
-                    val company = "Company Name"
                     Column {
                         OutlinedTextField(
                             value = jobCompany,
                             onValueChange = { jobCompany = it },
-                            label = { Text(text = company, fontFamily = raleway) }
+                            label = { Text(text = "Company Name", fontFamily = raleway) }
                         )
                     }
 
@@ -245,12 +246,11 @@ fun AddExperienceDialog(
 
                     // Responsibilities
                     Spacer(modifier = Modifier.height(25.dp))
-                    val responsibility = "Responsibilities"
                     Column {
                         OutlinedTextField(
                             value = jobResponsibilities,
                             onValueChange = { jobResponsibilities = it },
-                            label = { Text(text = responsibility, fontFamily = raleway) }
+                            label = { Text(text = "Responsibilities", fontFamily = raleway) }
                         )
                     }
 
@@ -258,9 +258,14 @@ fun AddExperienceDialog(
                     Button(onClick = {
                         // submit experience
                         if (jobTitle != "" && jobCompany != "" && jobYears != "" && jobResponsibilities != "") {
-
-                        } // also check if jobYears is a number
-
+                            viewModel.addExperience(Experience(
+                                username = user?.username!!,
+                                jobTitle = jobTitle,
+                                companyName = jobCompany,
+                                months = jobYears.toInt(),
+                                responsibilities = jobResponsibilities
+                            ))
+                        }
                     }) {
                         Text(text = "Submit", fontFamily = raleway)
                     }

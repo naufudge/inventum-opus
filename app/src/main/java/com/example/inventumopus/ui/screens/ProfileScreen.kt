@@ -240,7 +240,7 @@ fun LoggedOutScreen(
             text = "Please sign in or sign up to view your profile and apply for your dream job!",
             fontFamily = poppins,
             fontSize = 13.sp,
-            color = Color.Gray,
+//            color = Color.Gray,
             textAlign = TextAlign.Center,
             lineHeight = 21.sp
         )
@@ -259,7 +259,7 @@ fun LoggedOutScreen(
                 Text(
                     text = "Sign In",
                     fontFamily = poppins,
-                    color = Color.DarkGray
+//                    color = Color.DarkGray
                 )
             }
 
@@ -272,7 +272,7 @@ fun LoggedOutScreen(
                 Text(
                     text = "Sign Up",
                     fontFamily = poppins,
-                    color = Color.DarkGray
+//                    color = Color.DarkGray
                 )
             }
         }

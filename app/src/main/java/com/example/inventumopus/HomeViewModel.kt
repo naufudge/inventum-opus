@@ -59,41 +59,42 @@ class HomeViewModel: ViewModel() {
             _allJobsData.value
         )
 
-    private val _signedIn = MutableStateFlow(true)
+    private val _signedIn = MutableStateFlow(false)
     val signedIn = _signedIn.asStateFlow()
 
-    var currentUser by mutableStateOf<User?>(value = User(
-        username = "nauf",
-        email = "nauf@gmail.com",
-        password = "1234",
-        qualifications = listOf(
-            Qualification(
-                username = "",
-                degree = "Bachelor's",
-                school = "Villa College",
-                field = "Computer Science"
-            ),
-            Qualification(
-                username = "",
-                degree = "Certificate IV",
-                school = "MNU",
-                field = "Computer Science"
-            ),
-        ),
-        experience = listOf(
-            Experience(
-                username = "",
-                jobTitle = "Computer Technician",
-                companyName = "MWSC",
-                months = 12,
-                responsibilities = "Managing the IT infrastructure"
-            )
-        ),
-        appliedJobs = listOf(),
-        bookmarks = listOf(),
-        picture = "",
-        userId = 1
-    ))
+//    var currentUser by mutableStateOf<User?>(value = User(
+//        username = "nauf",
+//        email = "nauf@gmail.com",
+//        password = "1234",
+//        qualifications = listOf(
+//            Qualification(
+//                username = "",
+//                degree = "Bachelor's",
+//                school = "Villa College",
+//                field = "Computer Science"
+//            ),
+//            Qualification(
+//                username = "",
+//                degree = "Certificate IV",
+//                school = "MNU",
+//                field = "Computer Science"
+//            ),
+//        ),
+//        experience = listOf(
+//            Experience(
+//                username = "",
+//                jobTitle = "Computer Technician",
+//                companyName = "MWSC",
+//                months = 12,
+//                responsibilities = "Managing the IT infrastructure"
+//            )
+//        ),
+//        appliedJobs = listOf(),
+//        bookmarks = listOf(),
+//        picture = "",
+//        userId = 1
+//    ))
+    var currentUser by mutableStateOf<User?>(value = null)
         private set
 
     init {
