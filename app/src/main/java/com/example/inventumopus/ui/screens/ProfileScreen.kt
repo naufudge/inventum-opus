@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -115,7 +116,7 @@ fun ProfileScreen (
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text (
-                        text= currentUser?.username!!,
+                        text= currentUser?.username!!.uppercase(),
                         fontFamily = poppins,
                         fontWeight = FontWeight.W600,
                         fontSize = 20.sp,
@@ -209,7 +210,7 @@ fun ProfileCard(
                 text = text,
                 fontFamily = poppins,
                 fontWeight = FontWeight.Thin,
-                color = Color.DarkGray,
+//                color = Color.DarkGray,
                 fontSize = 14.sp
             )
         }

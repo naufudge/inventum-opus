@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventumopus.api.RetrofitInstance
+import com.example.inventumopus.datamodels.Experience
+import com.example.inventumopus.datamodels.ExperienceResponse
 import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.datamodels.Jobs
 import com.example.inventumopus.datamodels.Qualification
@@ -13,7 +15,6 @@ import com.example.inventumopus.datamodels.QualificationResponse
 import com.example.inventumopus.datamodels.User
 import com.example.inventumopus.datamodels.UserCreation
 import com.example.inventumopus.datamodels.UserCreationResponse
-import com.example.inventumopus.datamodels.Username
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,10 +59,41 @@ class HomeViewModel: ViewModel() {
             _allJobsData.value
         )
 
-    private val _signedIn = MutableStateFlow(false)
+    private val _signedIn = MutableStateFlow(true)
     val signedIn = _signedIn.asStateFlow()
 
-    var currentUser by mutableStateOf<User?>(value = null)
+    var currentUser by mutableStateOf<User?>(value = User(
+        username = "nauf",
+        email = "nauf@gmail.com",
+        password = "1234",
+        qualifications = listOf(
+            Qualification(
+                username = "",
+                degree = "Bachelor's",
+                school = "Villa College",
+                field = "Computer Science"
+            ),
+            Qualification(
+                username = "",
+                degree = "Certificate IV",
+                school = "MNU",
+                field = "Computer Science"
+            ),
+        ),
+        experience = listOf(
+            Experience(
+                username = "",
+                jobTitle = "Computer Technician",
+                companyName = "MWSC",
+                months = 12,
+                responsibilities = "Managing the IT infrastructure"
+            )
+        ),
+        appliedJobs = listOf(),
+        bookmarks = listOf(),
+        picture = "",
+        userId = 1
+    ))
         private set
 
     init {
@@ -203,8 +234,27 @@ class HomeViewModel: ViewModel() {
 
         }
     }
+
+    // Function to add a user's experience
+    fun addExperience(
+        experience: Experience
+    ) {
+        viewModelScope.launch {
+            val call: Call<ExperienceResponse> = RetrofitInstance.apiService.addExperience(experience)
+            call.enqueue(object: Callback<ExperienceResponse> {
+                override fun onResponse(
+                    call: Call<ExperienceResponse>,
+                    response: Response<ExperienceResponse>
+                ) {
+                    getUser(experience.username)
+                    println("Added user experience")
+                }
+
+                override fun onFailure(call: Call<ExperienceResponse>, t: Throwable) {
+                    println("Failed to add user qualification")
+                }
+            })
+
+        }
+    }
 }
-
-
-
-

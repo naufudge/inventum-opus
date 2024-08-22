@@ -2,8 +2,9 @@ package com.example.inventumopus.datamodels
 
 data class Experience(
     val username: String,
+    val jobTitle: String,
     val companyName: String,
-    val months: Float,
+    val months: Int,
     val responsibilities: String
 )
 

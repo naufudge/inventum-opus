@@ -20,6 +20,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -53,7 +54,8 @@ fun HomeScreen (
     viewModel: HomeViewModel
 ) {
     val jobsData = viewModel.jobsData.collectAsState()
-    val user = "Guest"
+    val user = viewModel.currentUser
+    val isLoggedIn by viewModel.signedIn.collectAsState()
 
     val exampleCategories = listOf("Accounting", "Software", "Medical", "Teaching", "Hardware", "Carpentry", "Administrative")
 
@@ -76,12 +78,22 @@ fun HomeScreen (
                     text = "Welcome,",
                     fontFamily = raleway
                 )
-                Text (
-                    text = user,
-                    fontSize = 30.sp,
-                    fontFamily = raleway,
-                    fontWeight = FontWeight.W700
-                )
+                if (isLoggedIn) {
+                    Text (
+                        text = user?.username!!.uppercase(),
+                        fontSize = 30.sp,
+                        fontFamily = raleway,
+                        fontWeight = FontWeight.W700
+                    )
+                } else {
+                    Text (
+                        text = "Guest",
+                        fontSize = 30.sp,
+                        fontFamily = raleway,
+                        fontWeight = FontWeight.W700
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
