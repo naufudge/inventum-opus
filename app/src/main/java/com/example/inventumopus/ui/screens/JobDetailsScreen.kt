@@ -42,6 +42,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.inventumopus.HomeViewModel
+import com.example.inventumopus.datamodels.Bookmark
 
 @Composable
 fun JobDetailsScreen(
@@ -57,8 +58,6 @@ fun JobDetailsScreen(
     if (isLoggedIn) {
         if (job?._id!! in currentUser?.bookmarks!!) {
             bookmark = true
-        } else {
-            bookmark = false
         }
     }
 
@@ -88,7 +87,21 @@ fun JobDetailsScreen(
             if (isLoggedIn) {
                 IconButton(
                     onClick = {
-                        bookmark = !bookmark
+                        if (bookmark) {
+                            viewModel.manageBookmark(Bookmark(
+                                username = currentUser?.username!!,
+                                jobId = job?._id!!,
+                                add = false
+                            ))
+                            bookmark = false
+                        } else {
+                            viewModel.manageBookmark(Bookmark(
+                                username = currentUser?.username!!,
+                                jobId = job?._id!!,
+                                add = true
+                            ))
+                            bookmark = true
+                        }
                     }
                 ) {
                     if (!bookmark) {

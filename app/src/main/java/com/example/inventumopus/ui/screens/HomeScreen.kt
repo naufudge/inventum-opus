@@ -187,7 +187,7 @@ fun RecentListings(
     LazyColumn (
         modifier = Modifier
             .fillMaxWidth(),
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(7.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {

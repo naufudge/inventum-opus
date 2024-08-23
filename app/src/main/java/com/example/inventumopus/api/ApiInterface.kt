@@ -1,8 +1,11 @@
 package com.example.inventumopus.api
 
+import com.example.inventumopus.datamodels.Bookmark
+import com.example.inventumopus.datamodels.BookmarkResponse
 import com.example.inventumopus.datamodels.Experience
 import com.example.inventumopus.datamodels.ExperienceResponse
 import com.example.inventumopus.datamodels.Job
+import com.example.inventumopus.datamodels.JobIDs
 import com.example.inventumopus.datamodels.Jobs
 import com.example.inventumopus.datamodels.Qualification
 import com.example.inventumopus.datamodels.QualificationResponse
@@ -37,4 +40,10 @@ interface ApiInterface {
 
     @POST("add_qualifications")
     fun addQualification(@Body data: Qualification): Call<QualificationResponse>
+
+    @POST("manage_bookmark")
+    fun manageBookmark(@Body data: Bookmark): Call<BookmarkResponse>
+
+    @POST("get_specific_jobs")
+    fun getSpecificJobs(@Body data: JobIDs): Call<Jobs>
 }

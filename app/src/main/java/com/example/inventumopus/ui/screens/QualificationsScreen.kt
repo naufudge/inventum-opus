@@ -49,7 +49,6 @@ import com.example.inventumopus.datamodels.Qualification
 
 @Composable
 fun QualificationsScreen(
-    navHostController: NavHostController,
     viewModel: HomeViewModel
 ) {
     val currentUser = viewModel.currentUser

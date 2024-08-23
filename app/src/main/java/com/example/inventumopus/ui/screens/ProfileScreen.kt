@@ -165,7 +165,7 @@ fun ProfileScreen (
                     ProfileCard(
                         text = "Bookmarks",
                         icon = R.drawable.bookmarks,
-                        onClick = {}
+                        onClick = { navHostController.navigate("bookmarks") }
                     )
 
                     // Applied Jobs

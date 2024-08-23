@@ -6,9 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventumopus.api.RetrofitInstance
+import com.example.inventumopus.datamodels.Bookmark
+import com.example.inventumopus.datamodels.BookmarkResponse
 import com.example.inventumopus.datamodels.Experience
 import com.example.inventumopus.datamodels.ExperienceResponse
 import com.example.inventumopus.datamodels.Job
+import com.example.inventumopus.datamodels.JobIDs
 import com.example.inventumopus.datamodels.Jobs
 import com.example.inventumopus.datamodels.Qualification
 import com.example.inventumopus.datamodels.QualificationResponse
@@ -61,6 +64,9 @@ class HomeViewModel: ViewModel() {
 
     private val _signedIn = MutableStateFlow(false)
     val signedIn = _signedIn.asStateFlow()
+
+    private val _bookmarksOrApplications : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
+    var bookmarksOrApplications : StateFlow<List<Job>> = _bookmarksOrApplications
 
 //    var currentUser by mutableStateOf<User?>(value = User(
 //        username = "nauf",
@@ -240,7 +246,6 @@ class HomeViewModel: ViewModel() {
         experience: Experience
     ) {
         viewModelScope.launch {
-            println(experience)
             val call: Call<ExperienceResponse> = RetrofitInstance.apiService.addExperience(experience)
             call.enqueue(object: Callback<ExperienceResponse> {
                 override fun onResponse(
@@ -256,6 +261,54 @@ class HomeViewModel: ViewModel() {
                 }
             })
 
+        }
+    }
+
+    // Function to add bookmark
+    fun manageBookmark(
+        bookmark: Bookmark
+    ) {
+        viewModelScope.launch {
+            val call: Call<BookmarkResponse> = RetrofitInstance.apiService.manageBookmark(bookmark)
+            call.enqueue(object: Callback<BookmarkResponse> {
+                override fun onResponse(
+                    call: Call<BookmarkResponse>,
+                    response: Response<BookmarkResponse>
+                ) {
+                    getUser(bookmark.username)
+                    println("Added user bookmark")
+                }
+
+                override fun onFailure(call: Call<BookmarkResponse>, t: Throwable) {
+                    println("Failed to add user bookmark")
+                }
+            })
+        }
+    }
+
+    // Function to get jobs from a list of job ids
+    fun getJobsFromList(
+        jobIds: JobIDs
+    ) {
+        viewModelScope.launch {
+            val call: Call<Jobs> = RetrofitInstance.apiService.getSpecificJobs(jobIds)
+            call.enqueue(object: Callback<Jobs> {
+                override fun onResponse(
+                    call: Call<Jobs>,
+                    response: Response<Jobs>
+                ) {
+                    if(response.isSuccessful){
+                        val responseData: List<Job>? = response.body()?.jobs
+                        if(responseData != null){
+                            _bookmarksOrApplications.value = responseData
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Jobs>, t: Throwable) {
+                    println("Failed to get bookmarks / applied jobs")
+                }
+            })
         }
     }
 }

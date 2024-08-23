@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.inventumopus.HomeViewModel
+import com.example.inventumopus.ui.screens.BookmarksScreen
 import com.example.inventumopus.ui.screens.ExperienceScreen
 import com.example.inventumopus.ui.screens.HomeScreen
 import com.example.inventumopus.ui.screens.JobDetailsScreen
@@ -60,10 +61,13 @@ fun Navigation(
             SignUpScreen(navHostController = navController, viewModel = viewModel)
         }
         composable(Screen.Experience.route) {
-            ExperienceScreen(navHostController = navController, viewModel = viewModel)
+            ExperienceScreen(viewModel = viewModel)
         }
         composable(Screen.Qualifications.route) {
-            QualificationsScreen(navHostController = navController, viewModel = viewModel)
+            QualificationsScreen(viewModel = viewModel)
+        }
+        composable(Screen.Bookmarks.route) {
+            BookmarksScreen(navHostController = navController, viewModel = viewModel)
         }
     }
 

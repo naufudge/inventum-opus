@@ -48,7 +48,6 @@ import com.example.inventumopus.datamodels.Experience
 
 @Composable
 fun ExperienceScreen(
-    navHostController: NavHostController,
     viewModel: HomeViewModel
 ) {
     val currentUser = viewModel.currentUser
