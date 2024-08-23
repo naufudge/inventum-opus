@@ -61,6 +61,10 @@ fun ProfileScreen (
     viewModel: HomeViewModel
 ) {
     val isLoggedIn by viewModel.signedIn.collectAsState()
+
+    if (isLoggedIn) {
+        viewModel.getUser(viewModel.currentUser?.username!!)
+    }
     val currentUser = viewModel.currentUser
 
     Column (

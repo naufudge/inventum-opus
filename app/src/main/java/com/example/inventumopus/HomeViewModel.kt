@@ -232,7 +232,6 @@ class HomeViewModel: ViewModel() {
                     println("Failed to add user qualification")
                 }
             })
-
         }
     }
 
@@ -241,6 +240,7 @@ class HomeViewModel: ViewModel() {
         experience: Experience
     ) {
         viewModelScope.launch {
+            println(experience)
             val call: Call<ExperienceResponse> = RetrofitInstance.apiService.addExperience(experience)
             call.enqueue(object: Callback<ExperienceResponse> {
                 override fun onResponse(
@@ -252,7 +252,7 @@ class HomeViewModel: ViewModel() {
                 }
 
                 override fun onFailure(call: Call<ExperienceResponse>, t: Throwable) {
-                    println("Failed to add user qualification")
+                    println("Failed to add user experience")
                 }
             })
 

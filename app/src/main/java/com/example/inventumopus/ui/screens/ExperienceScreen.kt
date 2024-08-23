@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
@@ -95,7 +94,7 @@ fun ExperienceScreen(
                 // Each Experience card
                 ElevatedCard (
                     modifier = Modifier
-                        .height(100.dp)
+                        .height(120.dp)
                         .fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
                 ) {
@@ -150,7 +149,7 @@ fun ExperienceScreen(
                                 fontWeight = FontWeight.Bold
                             )
                             Text(text = experience.companyName, fontFamily = poppins, fontSize = 14.sp, fontStyle = FontStyle.Italic)
-                            Text(text = "${experience.months} Years", fontFamily = poppins, fontSize = 14.sp)
+                            Text(text = "${experience.years} Years", fontFamily = poppins, fontSize = 14.sp)
                         }
                     }
                 }
@@ -262,7 +261,7 @@ fun AddExperienceDialog(
                                 username = user?.username!!,
                                 jobTitle = jobTitle,
                                 companyName = jobCompany,
-                                months = jobYears.toInt(),
+                                years = jobYears.toInt(),
                                 responsibilities = jobResponsibilities
                             ))
                         }

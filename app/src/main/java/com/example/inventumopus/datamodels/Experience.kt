@@ -4,7 +4,7 @@ data class Experience(
     val username: String,
     val jobTitle: String,
     val companyName: String,
-    val months: Int,
+    val years: Int,
     val responsibilities: String
 )
 
