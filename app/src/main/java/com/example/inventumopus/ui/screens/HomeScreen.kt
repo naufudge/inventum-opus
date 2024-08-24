@@ -180,7 +180,6 @@ fun PopularCategoryCard(item: Category) {
                 fontSize = 13.sp,
             )
         }
-
     }
 }
 

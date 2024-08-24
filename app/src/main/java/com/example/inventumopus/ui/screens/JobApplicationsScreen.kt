@@ -19,6 +19,10 @@ import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.datamodels.JobIDs
 import com.example.inventumopus.ui.components.Loading
 
+/* TODO:
+* - Include job application status.
+*/
+
 @Composable
 fun JobApplicationsScreen(
     navHostController: NavHostController,

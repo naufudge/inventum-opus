@@ -25,8 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.inventumopus.HomeViewModel
+import com.example.inventumopus.R
 import com.example.inventumopus.ui.GoogleFonts
 
 
@@ -115,13 +116,13 @@ fun SignInScreen (
                     if (currentUser != null) {
                         if (currentUser.username == username && currentUser.password == password) {
                             viewModel.setSignInStatus(true)
+                            navHostController.navigate("profile")
                         } else {
                             dialogTitle = "Login Failed!"
                             message = "Username or Password is incorrect"
                             showDialog = true
                         }
                     }
-//                navHostController.navigate("profile")
                 }) {
                 Text(
                     text = "Sign In",
@@ -164,7 +165,11 @@ fun SignInFields(
             .padding(vertical = 5.dp),
         placeholder = { Text(text = placeholderText, fontFamily = raleway, fontSize = 13.sp) },
         leadingIcon = {
-            Icon(imageVector = leadingIcon, contentDescription = "Search Icon")
+            if (placeholderText == "Password") {
+                Icon(painter = painterResource(R.drawable.password), contentDescription = "Password")
+            } else {
+                Icon(imageVector = leadingIcon, contentDescription = "Sign in/up field")
+            }
         },
         trailingIcon = {
             if (text.isNotEmpty()) {
