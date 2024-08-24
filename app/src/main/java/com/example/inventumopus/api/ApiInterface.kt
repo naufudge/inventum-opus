@@ -5,6 +5,8 @@ import com.example.inventumopus.datamodels.BookmarkResponse
 import com.example.inventumopus.datamodels.Experience
 import com.example.inventumopus.datamodels.ExperienceResponse
 import com.example.inventumopus.datamodels.Job
+import com.example.inventumopus.datamodels.JobApplication
+import com.example.inventumopus.datamodels.JobApplicationResponse
 import com.example.inventumopus.datamodels.JobIDs
 import com.example.inventumopus.datamodels.Jobs
 import com.example.inventumopus.datamodels.Qualification
@@ -46,4 +48,7 @@ interface ApiInterface {
 
     @POST("get_specific_jobs")
     fun getSpecificJobs(@Body data: JobIDs): Call<Jobs>
+
+    @POST("add_application")
+    fun addApplication(@Body data: JobApplication): Call<JobApplicationResponse>
 }

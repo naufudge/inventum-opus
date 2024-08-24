@@ -1,5 +1,6 @@
 package com.example.inventumopus.ui.screens
 
+import InformationModal
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,7 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavHostController
 import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.datamodels.Experience
 
@@ -178,6 +178,10 @@ fun AddExperienceDialog(
 
     var isError by remember { mutableStateOf(false) }
 
+    var infoDialogTitle by remember { mutableStateOf("") }
+    var infoDialogMsg by remember { mutableStateOf("") }
+    var showInfoModal by remember { mutableStateOf(false) }
+
     if (showDialog) {
         Dialog(onDismissRequest = onDismiss) {
             Surface (
@@ -263,6 +267,14 @@ fun AddExperienceDialog(
                                 years = jobYears.toInt(),
                                 responsibilities = jobResponsibilities
                             ))
+                            onDismiss()
+                            infoDialogTitle = "Added Successfully!"
+                            infoDialogMsg = "Added your experience successfully."
+                            showInfoModal = true
+                        } else {
+                            infoDialogTitle = "Please fill all the fields"
+                            infoDialogMsg = "Please fill all the required fields before submitting."
+                            showInfoModal = true
                         }
                     }) {
                         Text(text = "Submit", fontFamily = raleway)
@@ -271,4 +283,10 @@ fun AddExperienceDialog(
             }
         }
     }
+    InformationModal(
+        showDialog = showInfoModal,
+        onDismiss = { showInfoModal = false },
+        title = infoDialogTitle,
+        message = infoDialogMsg
+    )
 }

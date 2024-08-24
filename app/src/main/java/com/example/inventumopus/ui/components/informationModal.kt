@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -43,12 +44,10 @@ fun InformationModal(
                     }
 
                     Text(text = title, fontFamily = prata)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = message, fontFamily = raleway)
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Text(text = message, fontFamily = raleway, textAlign = TextAlign.Center)
                     Spacer(modifier = Modifier.height(40.dp))
-//                    Button(onClick = { onDismiss() }) {
-//                        Text("Close")
-//                    }
                 }
             }
         }

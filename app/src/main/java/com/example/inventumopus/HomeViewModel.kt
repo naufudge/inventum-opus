@@ -11,6 +11,8 @@ import com.example.inventumopus.datamodels.BookmarkResponse
 import com.example.inventumopus.datamodels.Experience
 import com.example.inventumopus.datamodels.ExperienceResponse
 import com.example.inventumopus.datamodels.Job
+import com.example.inventumopus.datamodels.JobApplication
+import com.example.inventumopus.datamodels.JobApplicationResponse
 import com.example.inventumopus.datamodels.JobIDs
 import com.example.inventumopus.datamodels.Jobs
 import com.example.inventumopus.datamodels.Qualification
@@ -281,6 +283,28 @@ class HomeViewModel: ViewModel() {
 
                 override fun onFailure(call: Call<BookmarkResponse>, t: Throwable) {
                     println("Failed to add user bookmark")
+                }
+            })
+        }
+    }
+
+    // Function to add a user's job application
+    fun addUserJobApplication(
+        application: JobApplication
+    ) {
+        viewModelScope.launch {
+            val call: Call<JobApplicationResponse> = RetrofitInstance.apiService.addApplication(application)
+            call.enqueue(object: Callback<JobApplicationResponse> {
+                override fun onResponse(
+                    call: Call<JobApplicationResponse>,
+                    response: Response<JobApplicationResponse>
+                ) {
+                    getUser(application.username)
+                    println("Added user's job application")
+                }
+
+                override fun onFailure(call: Call<JobApplicationResponse>, t: Throwable) {
+                    println("Failed to add user's job application")
                 }
             })
         }
