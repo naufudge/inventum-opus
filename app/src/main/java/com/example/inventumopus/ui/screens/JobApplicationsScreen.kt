@@ -20,15 +20,16 @@ import com.example.inventumopus.datamodels.JobIDs
 import com.example.inventumopus.ui.components.Loading
 
 @Composable
-fun BookmarksScreen(
+fun JobApplicationsScreen(
     navHostController: NavHostController,
     viewModel: HomeViewModel
 ) {
     val currentUser = viewModel.currentUser
-    viewModel.getUserBookmarks(JobIDs(currentUser?.bookmarks!!))
 
-    val isLoading by viewModel::bookmarksScreenLoading
-    val bookmarks = viewModel.userBookmarks.collectAsState()
+    viewModel.getUserAppliedJobs(JobIDs(currentUser?.appliedJobs!!))
+    val appliedJobs = viewModel.userAppliedJobs.collectAsState()
+
+    val isLoading by viewModel::applicationsScreenLoading
 
     Column (
         modifier = Modifier
@@ -47,14 +48,14 @@ fun BookmarksScreen(
         ) {
             Text(
                 modifier = Modifier.padding(start = 10.dp),
-                text = "Bookmarks",
+                text = "Applied Jobs",
                 fontFamily = prata,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
         }
         if (!isLoading) {
-            if (bookmarks.value.isEmpty()) {
+            if (appliedJobs.value.isEmpty()) {
                 Column (
                     modifier = Modifier
                         .padding(top = 20.dp)
@@ -62,17 +63,22 @@ fun BookmarksScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "You have no bookmarks right now.",
+                        text = "You have not applied for any jobs yet.",
                         fontFamily = raleway,
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
                 }
             } else {
-                RecentListings(navHostController = navHostController, viewModel = viewModel, jobs = bookmarks.value)
+                RecentListings(
+                    navHostController = navHostController,
+                    viewModel = viewModel,
+                    jobs = appliedJobs.value
+                )
             }
         } else {
             Loading()
         }
+
     }
 }

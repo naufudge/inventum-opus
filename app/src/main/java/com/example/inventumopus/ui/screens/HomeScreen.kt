@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.R
 import com.example.inventumopus.ui.GoogleFonts
 import com.example.inventumopus.ui.components.JobListingCard
+import com.example.inventumopus.ui.components.Loading
 
 val font = GoogleFonts()
 val prata = font.Prata
@@ -57,9 +59,9 @@ fun HomeScreen (
 ) {
     val jobsData = viewModel.jobsData.collectAsState()
     val user = viewModel.currentUser
+
     val isLoggedIn by viewModel.signedIn.collectAsState()
 
-    val exampleCategories = listOf("Accounting", "Software", "Medical", "Teaching", "Hardware", "Carpentry", "Administrative")
     val categories = listOf(Category.Accounting, Category.Software, Category.Medical, Category.Teaching, Category.Hardware, Category.Carpentry, Category.Administration)
 
     Column (
@@ -67,11 +69,11 @@ fun HomeScreen (
             .padding(top = 15.dp, start = 15.dp, end = 15.dp),
         verticalArrangement = Arrangement.Center,
     ) {
+        // Welcome text row
         Row (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-
         ) {
             Column (
                 modifier = Modifier
@@ -127,7 +129,11 @@ fun HomeScreen (
                 fontFamily = poppins,
                 fontWeight = FontWeight.Bold
             )
-            RecentListings(navHostController = navHostController, jobs = jobsData.value, viewModel = viewModel)
+            RecentListings(
+                navHostController = navHostController,
+                jobs = jobsData.value,
+                viewModel = viewModel
+            )
         }
 
     }
@@ -184,16 +190,23 @@ fun RecentListings(
     viewModel: HomeViewModel,
     jobs: List<Job>
 ) {
-    LazyColumn (
-        modifier = Modifier
-            .fillMaxWidth(),
-        contentPadding = PaddingValues(7.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    val isLoading by viewModel::homeScreenLoading
 
-    ) {
-        itemsIndexed(jobs) { _, job ->
-            JobListingCard(navHostController = navHostController, jobItem = job, viewModel = viewModel)
-            Spacer(modifier = Modifier.height(24.dp))
+    if (!isLoading) {
+        LazyColumn (
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(7.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+
+        ) {
+            itemsIndexed(jobs) { _, job ->
+                JobListingCard(navHostController = navHostController, jobItem = job, viewModel = viewModel)
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
+    } else {
+        Loading()
     }
+
 }

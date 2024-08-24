@@ -77,18 +77,12 @@ fun JobDetailsScreen(
         }
     }
     Scaffold (
-        topBar = {},
         bottomBar = {
             if (isLoggedIn) JobDetailsBottomBar(
                 onApplyClick = {
                     showDialog = true
                 }
             )
-//            JobDetailsBottomBar(
-//                onApplyClick = {
-//                    showDialog = true
-//                }
-//            )
         }
     ) { innerPadding ->
         Column (
@@ -114,16 +108,29 @@ fun JobDetailsScreen(
                 }
                 // Bookmark Button
                 if (isLoggedIn) {
-                    IconButton(
-                        onClick = {
-                            if (bookmark) {
-                                viewModel.manageBookmark(Bookmark(
-                                    username = currentUser?.username!!,
-                                    jobId = job?._id!!,
-                                    add = false
-                                ))
+                    if (bookmark) {
+                        IconButton (
+                            onClick = {
+                                viewModel.manageBookmark(
+                                    Bookmark(
+                                        username = currentUser?.username!!,
+                                        jobId = job?._id!!,
+                                        add = false
+                                    )
+                                )
                                 bookmark = false
-                            } else {
+                            }
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(35.dp),
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = "heart_filled",
+                                tint = Color.Red
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = {
                                 viewModel.manageBookmark(Bookmark(
                                     username = currentUser?.username!!,
                                     jobId = job?._id!!,
@@ -131,26 +138,53 @@ fun JobDetailsScreen(
                                 ))
                                 bookmark = true
                             }
-                        }
-                    ) {
-                        if (!bookmark) {
+                        ) {
                             Icon(
                                 modifier = Modifier.size(35.dp),
                                 imageVector = Icons.Outlined.FavoriteBorder,
-                                contentDescription = "back"
-                            )
-                        } else {
-                            Icon(
-                                modifier = Modifier.size(35.dp),
-                                imageVector = Icons.Default.Favorite,
-                                contentDescription = "back_filled",
-                                tint = Color.Red
+                                contentDescription = "heart"
                             )
                         }
                     }
+
+//                    IconButton(
+//                        onClick = {
+//                            if (bookmark) {
+//                                viewModel.manageBookmark(
+//                                    Bookmark(
+//                                        username = currentUser?.username!!,
+//                                        jobId = job?._id!!,
+//                                        add = false
+//                                    )
+//                                )
+//                                bookmark = false
+//                            } else {
+//                                viewModel.manageBookmark(Bookmark(
+//                                    username = currentUser?.username!!,
+//                                    jobId = job?._id!!,
+//                                    add = true
+//                                ))
+//                                bookmark = true
+//                            }
+//                        }
+//                    ) {
+//                        if (!bookmark) {
+//                            Icon(
+//                                modifier = Modifier.size(35.dp),
+//                                imageVector = Icons.Outlined.FavoriteBorder,
+//                                contentDescription = "heart"
+//                            )
+//                        } else {
+//                            Icon(
+//                                modifier = Modifier.size(35.dp),
+//                                imageVector = Icons.Default.Favorite,
+//                                contentDescription = "heart_filled",
+//                                tint = Color.Red
+//                            )
+//                        }
+//                    }
                 }
             }
-
 
             Spacer(modifier = Modifier.height(50.dp))
             Column (
@@ -185,7 +219,6 @@ fun JobDetailsScreen(
                                 contentDescription = null
                             )
                         }
-
                     }
 
                     Spacer(modifier = Modifier.height(30.dp))

@@ -10,6 +10,7 @@ import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.ui.screens.BookmarksScreen
 import com.example.inventumopus.ui.screens.ExperienceScreen
 import com.example.inventumopus.ui.screens.HomeScreen
+import com.example.inventumopus.ui.screens.JobApplicationsScreen
 import com.example.inventumopus.ui.screens.JobDetailsScreen
 import com.example.inventumopus.ui.screens.ProfileScreen
 import com.example.inventumopus.ui.screens.QualificationsScreen
@@ -68,6 +69,9 @@ fun Navigation(
         }
         composable(Screen.Bookmarks.route) {
             BookmarksScreen(navHostController = navController, viewModel = viewModel)
+        }
+        composable(Screen.Applications.route) {
+            JobApplicationsScreen(navHostController = navController, viewModel = viewModel)
         }
     }
 

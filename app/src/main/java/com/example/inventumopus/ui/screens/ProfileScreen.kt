@@ -53,6 +53,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.R
+import com.example.inventumopus.ui.Screen
 
 
 @Composable
@@ -140,7 +141,7 @@ fun ProfileScreen (
                         text = "Experience",
                         icon = R.drawable.work_bag_svgrepo_com,
                         onClick = {
-                            navHostController.navigate("experience")
+                            navHostController.navigate(Screen.Experience.route)
                         }
                     )
 
@@ -150,7 +151,7 @@ fun ProfileScreen (
                         icon = R.drawable.graduate,
                         width = 28.dp,
                         onClick = {
-                            navHostController.navigate("qualifications")
+                            navHostController.navigate(Screen.Qualifications.route)
                         }
                     )
                 }
@@ -165,7 +166,7 @@ fun ProfileScreen (
                     ProfileCard(
                         text = "Bookmarks",
                         icon = R.drawable.bookmarks,
-                        onClick = { navHostController.navigate("bookmarks") }
+                        onClick = { navHostController.navigate(Screen.Bookmarks.route) }
                     )
 
                     // Applied Jobs
@@ -173,7 +174,7 @@ fun ProfileScreen (
                         text = "Applied Jobs",
                         icon = R.drawable.pen_and_paper_svgrepo_com,
                         width = 25.dp,
-                        onClick = {}
+                        onClick = { navHostController.navigate(Screen.Applications.route) }
                     )
                 }
             }
@@ -257,7 +258,7 @@ fun LoggedOutScreen(
             // Sign in button
             OutlinedButton(
                 onClick = {
-                    navHostController.navigate("signin")
+                    navHostController.navigate(Screen.SignIn.route)
                 }
             ) {
                 Text(
@@ -270,7 +271,7 @@ fun LoggedOutScreen(
             // Sign up button
             OutlinedButton (
                 onClick = {
-                    navHostController.navigate("signup")
+                    navHostController.navigate(Screen.SignUp.route)
                 }
             ) {
                 Text(

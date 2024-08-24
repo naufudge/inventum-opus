@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.inventumopus.api.RetrofitInstance
 import com.example.inventumopus.datamodels.Bookmark
 import com.example.inventumopus.datamodels.BookmarkResponse
@@ -34,6 +35,10 @@ import retrofit2.Response
 class HomeViewModel: ViewModel() {
     private val _jobsData : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
     var jobsData : StateFlow<List<Job>> = _jobsData
+
+    var homeScreenLoading by mutableStateOf(true)
+    var applicationsScreenLoading by mutableStateOf(true)
+    var bookmarksScreenLoading by mutableStateOf(true)
 
     private val _allJobsData : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
     var allJobsData : StateFlow<List<Job>> = _allJobsData
@@ -67,8 +72,12 @@ class HomeViewModel: ViewModel() {
     private val _signedIn = MutableStateFlow(false)
     val signedIn = _signedIn.asStateFlow()
 
-    private val _bookmarksOrApplications : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
-    var bookmarksOrApplications : StateFlow<List<Job>> = _bookmarksOrApplications
+    private val _userBookmarks : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
+    var userBookmarks : StateFlow<List<Job>> = _userBookmarks
+
+    private val _userAppliedJobs : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
+    var userAppliedJobs : StateFlow<List<Job>> = _userAppliedJobs
+
 
 //    var currentUser by mutableStateOf<User?>(value = User(
 //        username = "nauf",
@@ -142,6 +151,7 @@ class HomeViewModel: ViewModel() {
                         val responseData: List<Job>? = response.body()?.jobs
                         if(responseData != null){
                             _jobsData.value = responseData
+                            homeScreenLoading = false
                         }
                     }
                 }
@@ -278,6 +288,7 @@ class HomeViewModel: ViewModel() {
                     response: Response<BookmarkResponse>
                 ) {
                     getUser(bookmark.username)
+                    bookmarksScreenLoading = true
                     println("Added user bookmark")
                 }
 
@@ -293,13 +304,14 @@ class HomeViewModel: ViewModel() {
         application: JobApplication
     ) {
         viewModelScope.launch {
+            getUser(application.username)
             val call: Call<JobApplicationResponse> = RetrofitInstance.apiService.addApplication(application)
             call.enqueue(object: Callback<JobApplicationResponse> {
                 override fun onResponse(
                     call: Call<JobApplicationResponse>,
                     response: Response<JobApplicationResponse>
                 ) {
-                    getUser(application.username)
+                    applicationsScreenLoading = true
                     println("Added user's job application")
                 }
 
@@ -310,11 +322,12 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    // Function to get jobs from a list of job ids
-    fun getJobsFromList(
+    // Function to get user's bookmarks
+    fun getUserBookmarks(
         jobIds: JobIDs
     ) {
         viewModelScope.launch {
+//            bookmarksScreenLoading = true
             val call: Call<Jobs> = RetrofitInstance.apiService.getSpecificJobs(jobIds)
             call.enqueue(object: Callback<Jobs> {
                 override fun onResponse(
@@ -324,13 +337,42 @@ class HomeViewModel: ViewModel() {
                     if(response.isSuccessful){
                         val responseData: List<Job>? = response.body()?.jobs
                         if(responseData != null){
-                            _bookmarksOrApplications.value = responseData
+                            _userBookmarks.value = responseData
+                            bookmarksScreenLoading = false
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<Jobs>, t: Throwable) {
-                    println("Failed to get bookmarks / applied jobs")
+                    println("Failed to get bookmarks.")
+                }
+            })
+        }
+    }
+
+    // Function to get user's applied jobs
+    fun getUserAppliedJobs(
+        jobIds: JobIDs
+    ) {
+        viewModelScope.launch {
+//            applicationsScreenLoading = true
+            val call: Call<Jobs> = RetrofitInstance.apiService.getSpecificJobs(jobIds)
+            call.enqueue(object: Callback<Jobs> {
+                override fun onResponse(
+                    call: Call<Jobs>,
+                    response: Response<Jobs>
+                ) {
+                    if(response.isSuccessful){
+                        val responseData: List<Job>? = response.body()?.jobs
+                        if(responseData != null){
+                            _userAppliedJobs.value = responseData
+                            applicationsScreenLoading = false
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Jobs>, t: Throwable) {
+                    println("Failed to get user's applied jobs.")
                 }
             })
         }
