@@ -146,8 +146,8 @@ fun SignInFields(
     onQueryChange: (String) -> Unit,
     leadingIcon: ImageVector,
     placeholderText: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     var text by remember { mutableStateOf(query) }
 

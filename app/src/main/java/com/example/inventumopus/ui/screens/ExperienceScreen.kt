@@ -1,6 +1,7 @@
 package com.example.inventumopus.ui.screens
 
 import InformationModal
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +53,9 @@ fun ExperienceScreen(
 ) {
     val currentUser = viewModel.currentUser
     var showExpDialog by remember { mutableStateOf(false) }
+    var showEditOrDeleteDialog by remember { mutableStateOf(false) }
+
+    val selectedExperience = viewModel.selectedExperience
 
     Column (
         modifier = Modifier
@@ -82,84 +86,112 @@ fun ExperienceScreen(
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add_experience")
             }
         }
-        // Experience list
-        LazyColumn (
-            modifier = Modifier
-                .padding(top = 35.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            itemsIndexed(currentUser?.experience!!) { _, experience ->
-                // Each Experience card
-                ElevatedCard (
-                    modifier = Modifier
-                        .height(120.dp)
-                        .fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
-                ) {
-                    Row (
+        if (currentUser?.experience!!.isEmpty()) {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "You have not added any past job experience. Please press the \"+\" button to add yours now!",
+                    fontFamily = poppins,
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            // Experience list
+            LazyColumn (
+                modifier = Modifier
+                    .padding(top = 35.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                itemsIndexed(currentUser.experience) { _, experience ->
+                    // Each Experience card
+                    ElevatedCard (
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
+                            .height(120.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                viewModel.selectedExperience(experience)
+                                showEditOrDeleteDialog = true
+                            },
+                        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
                     ) {
-                        // Icon Column
-                        Column (
+                        Row (
                             modifier = Modifier
-                                .fillMaxHeight(),
-                            verticalArrangement = Arrangement.Center,
-
-                            ) {
-                            Card (
+                                .padding(horizontal = 20.dp)
+                                .fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Icon Column
+                            Column (
                                 modifier = Modifier
-                                    .size(65.dp),
-                                colors = CardColors(
-                                    containerColor = Color.Gray,
-                                    contentColor = Color.White,
-                                    disabledContentColor = Color.DarkGray,
-                                    disabledContainerColor = Color.LightGray
-                                )
-                            ) {
-                                Column (
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = "${experience.companyName.first()}",
-                                        textAlign = TextAlign.Center,
-                                        fontWeight = FontWeight.Bold,
-                                        fontFamily = poppins,
-                                        fontSize = 23.sp
-                                    )
-                                }
+                                    .fillMaxHeight(),
+                                verticalArrangement = Arrangement.Center,
 
+                                ) {
+                                Card (
+                                    modifier = Modifier
+                                        .size(65.dp),
+                                    colors = CardColors(
+                                        containerColor = Color.Gray,
+                                        contentColor = Color.White,
+                                        disabledContentColor = Color.DarkGray,
+                                        disabledContainerColor = Color.LightGray
+                                    )
+                                ) {
+                                    Column (
+                                        modifier = Modifier.fillMaxSize(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "${experience.companyName!!.first()}",
+                                            textAlign = TextAlign.Center,
+                                            fontWeight = FontWeight.Bold,
+                                            fontFamily = poppins,
+                                            fontSize = 23.sp
+                                        )
+                                    }
+
+                                }
+                            }
+                            // Experience Details Column
+                            Column (
+                                modifier = Modifier.padding(horizontal = 40.dp),
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Text(
+                                    text = experience.jobTitle!!,
+                                    fontFamily = poppins,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(text = experience.companyName!!, fontFamily = poppins, fontSize = 14.sp, fontStyle = FontStyle.Italic)
+                                Text(text = "${experience.years} Years", fontFamily = poppins, fontSize = 14.sp)
                             }
                         }
-                        // Experience Details Column
-                        Column (
-                            modifier = Modifier.padding(horizontal = 40.dp),
-                            horizontalAlignment = Alignment.Start
-                        ) {
-                            Text(
-                                text = experience.jobTitle,
-                                fontFamily = poppins,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(text = experience.companyName, fontFamily = poppins, fontSize = 14.sp, fontStyle = FontStyle.Italic)
-                            Text(text = "${experience.years} Years", fontFamily = poppins, fontSize = 14.sp)
-                        }
                     }
+                    Spacer(modifier = Modifier.height(28.dp))
                 }
-                Spacer(modifier = Modifier.height(28.dp))
             }
         }
 
         AddExperienceDialog(
             showDialog = showExpDialog,
             viewModel = viewModel,
-            onDismiss = { showExpDialog = false })
+            onDismiss = { showExpDialog = false }
+        )
+        EditOrDeletePopUp(
+            showDialog = showEditOrDeleteDialog,
+            onDismiss = { showEditOrDeleteDialog = false },
+            viewModel = viewModel,
+            experience = selectedExperience
+        )
     }
 
 }
@@ -176,7 +208,7 @@ fun AddExperienceDialog(
     var jobYears by remember { mutableStateOf("") }
     var jobResponsibilities by remember { mutableStateOf("") }
 
-    var isError by remember { mutableStateOf(false) }
+    var fieldIsError by remember { mutableStateOf(false) }
 
     var infoDialogTitle by remember { mutableStateOf("") }
     var infoDialogMsg by remember { mutableStateOf("") }
@@ -238,11 +270,11 @@ fun AddExperienceDialog(
                             value = jobYears,
                             onValueChange = {
                                 jobYears = it
-                                isError = !it.all { char -> char.isDigit() }
+                                fieldIsError = !it.all { char -> char.isDigit() }
                             },
                             label = { Text(text = "Number of Years Worked", fontFamily = raleway) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = isError
+                            isError = fieldIsError
                         )
                     }
 
@@ -260,14 +292,19 @@ fun AddExperienceDialog(
                     Button(onClick = {
                         // submit experience
                         if (jobTitle != "" && jobCompany != "" && jobYears != "" && jobResponsibilities != "") {
-                            viewModel.addExperience(Experience(
+                            viewModel.manageExperience(Experience(
                                 username = user?.username!!,
                                 jobTitle = jobTitle,
                                 companyName = jobCompany,
                                 years = jobYears.toInt(),
-                                responsibilities = jobResponsibilities
+                                responsibilities = jobResponsibilities,
+                                add = true
                             ))
-                            onDismiss()
+                            jobTitle = ""
+                            jobCompany = ""
+                            jobYears = ""
+                            jobResponsibilities = ""
+
                             infoDialogTitle = "Added Successfully!"
                             infoDialogMsg = "Added your experience successfully."
                             showInfoModal = true
@@ -285,8 +322,145 @@ fun AddExperienceDialog(
     }
     InformationModal(
         showDialog = showInfoModal,
-        onDismiss = { showInfoModal = false },
+        onDismiss = {
+            showInfoModal = false
+            onDismiss()
+        },
         title = infoDialogTitle,
         message = infoDialogMsg
     )
+}
+
+@Composable
+fun EditExperienceDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    viewModel: HomeViewModel,
+    experience: Experience
+) {
+    var jobTitle by remember { mutableStateOf(experience.jobTitle!!) }
+    var jobCompany by remember { mutableStateOf(experience.companyName!!) }
+    var jobYears by remember { mutableStateOf(experience.years.toString()) }
+    var jobResponsibilities by remember { mutableStateOf(experience.responsibilities!!) }
+
+    var fieldIsError by remember { mutableStateOf(false) }
+
+    var infoDialogTitle by remember { mutableStateOf("") }
+    var infoDialogMsg by remember { mutableStateOf("") }
+    var showInfoDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        Dialog(onDismissRequest = onDismiss) {
+            Surface (
+                shape = MaterialTheme.shapes.medium,
+                shadowElevation = 8.dp
+            ) {
+                Column (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, bottom = 30.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row (
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        IconButton(onClick = onDismiss) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "close")
+                        }
+                    }
+                    Text(
+                        text = "Edit Experience",
+                        fontFamily = poppins,
+                        fontWeight = FontWeight.W700,
+                        fontSize = 18.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(25.dp))
+
+                    // Job Title Field
+                    Column {
+                        OutlinedTextField(
+                            value = jobTitle,
+                            onValueChange = { jobTitle = it },
+                            label = { Text(text = "Job Title", fontFamily = raleway) }
+                        )
+                    }
+
+                    // Company Name Field
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Column {
+                        OutlinedTextField(
+                            value = jobCompany,
+                            onValueChange = { jobCompany = it },
+                            label = { Text(text = "Company Name", fontFamily = raleway) }
+                        )
+                    }
+
+                    // Number of Years Field
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Column {
+                        OutlinedTextField(
+                            value = jobYears,
+                            onValueChange = {
+                                jobYears = it
+                                fieldIsError = !it.all { char -> char.isDigit() }
+                            },
+                            label = { Text(text = "Number of Years Worked", fontFamily = raleway) },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = fieldIsError
+                        )
+                    }
+
+                    // Responsibilities
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Column {
+                        OutlinedTextField(
+                            value = jobResponsibilities,
+                            onValueChange = { jobResponsibilities = it },
+                            label = { Text(text = "Responsibilities", fontFamily = raleway) }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(25.dp))
+                    // Edit qualification button
+                    Button(onClick = {
+                        if (jobTitle != "" && jobCompany != "" && jobYears != "" && jobResponsibilities != "") {
+                            viewModel.editExperience(
+                                Experience(
+                                    username = viewModel.currentUser?.username!!,
+                                    expId = experience.expId,
+                                    jobTitle = jobTitle,
+                                    companyName = jobCompany,
+                                    years = jobYears.toInt(),
+                                    responsibilities = jobResponsibilities
+                                )
+                            )
+
+                            infoDialogTitle = "Success"
+                            infoDialogMsg = "Successfully edited experience!"
+                            showInfoDialog = true
+                        } else {
+                            infoDialogTitle = "Error"
+                            infoDialogMsg = "Please fill all the fields!"
+                            showInfoDialog = true
+                        }
+                    }) {
+                        Text(text = "Submit", fontFamily = raleway)
+                    }
+                }
+            }
+        }
+        InformationModal(
+            showDialog = showInfoDialog,
+            onDismiss = {
+                showInfoDialog = false
+                onDismiss()
+            },
+            message = infoDialogMsg,
+            title = infoDialogTitle
+        )
+    }
 }

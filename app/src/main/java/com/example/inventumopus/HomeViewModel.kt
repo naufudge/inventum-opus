@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.inventumopus.api.RetrofitInstance
 import com.example.inventumopus.datamodels.Bookmark
 import com.example.inventumopus.datamodels.BookmarkResponse
@@ -39,11 +38,19 @@ class HomeViewModel: ViewModel() {
     var homeScreenLoading by mutableStateOf(true)
     var applicationsScreenLoading by mutableStateOf(true)
     var bookmarksScreenLoading by mutableStateOf(true)
+    var experienceScreenLoading by mutableStateOf(false)
+    var qualificationScreenLoading by mutableStateOf(false)
 
     private val _allJobsData : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
     var allJobsData : StateFlow<List<Job>> = _allJobsData
 
     var selectedJob by mutableStateOf<Job?>(value = null)
+        private set
+
+    var selectedQualification by mutableStateOf<Qualification?>(value = null)
+        private set
+
+    var selectedExperience by mutableStateOf<Experience?>(value = null)
         private set
 
     private val _searchText = MutableStateFlow("")
@@ -78,39 +85,6 @@ class HomeViewModel: ViewModel() {
     private val _userAppliedJobs : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
     var userAppliedJobs : StateFlow<List<Job>> = _userAppliedJobs
 
-
-//    var currentUser by mutableStateOf<User?>(value = User(
-//        username = "nauf",
-//        email = "nauf@gmail.com",
-//        password = "1234",
-//        qualifications = listOf(
-//            Qualification(
-//                username = "",
-//                degree = "Bachelor's",
-//                school = "Villa College",
-//                field = "Computer Science"
-//            ),
-//            Qualification(
-//                username = "",
-//                degree = "Certificate IV",
-//                school = "MNU",
-//                field = "Computer Science"
-//            ),
-//        ),
-//        experience = listOf(
-//            Experience(
-//                username = "",
-//                jobTitle = "Computer Technician",
-//                companyName = "MWSC",
-//                months = 12,
-//                responsibilities = "Managing the IT infrastructure"
-//            )
-//        ),
-//        appliedJobs = listOf(),
-//        bookmarks = listOf(),
-//        picture = "",
-//        userId = 1
-//    ))
     var currentUser by mutableStateOf<User?>(value = null)
         private set
 
@@ -123,6 +97,20 @@ class HomeViewModel: ViewModel() {
     fun selectedJob(job: Job){
         viewModelScope.launch {
             selectedJob = job
+        }
+    }
+
+    // Function that will help keep track of the qualification that the user clicks on
+    fun selectedQualification(qualification: Qualification){
+        viewModelScope.launch {
+            selectedQualification = qualification
+        }
+    }
+
+    // Function that will help keep track of the experience that the user clicks on
+    fun selectedExperience(experience: Experience){
+        viewModelScope.launch {
+            selectedExperience = experience
         }
     }
 
@@ -231,18 +219,19 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    // Function to add a user's qualification
-    fun addQualification(
+    // Function to add or remove a user's qualification
+    fun manageQualification(
         qualification: Qualification
     ) {
         viewModelScope.launch {
-            val call: Call<QualificationResponse> = RetrofitInstance.apiService.addQualification(qualification)
+            val call: Call<QualificationResponse> = RetrofitInstance.apiService.manageQualification(qualification)
             call.enqueue(object: Callback<QualificationResponse> {
                 override fun onResponse(
                     call: Call<QualificationResponse>,
                     response: Response<QualificationResponse>
                 ) {
                     getUser(qualification.username)
+                    qualificationScreenLoading = false
                     println("Added user qualification")
                 }
 
@@ -253,12 +242,35 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    // Function to add a user's experience
-    fun addExperience(
+    // Function to edit a user's qualification
+    fun editQualification(
+        qualification: Qualification
+    ) {
+        viewModelScope.launch {
+            val call: Call<QualificationResponse> = RetrofitInstance.apiService.editQualification(qualification)
+            call.enqueue(object: Callback<QualificationResponse> {
+                override fun onResponse(
+                    call: Call<QualificationResponse>,
+                    response: Response<QualificationResponse>
+                ) {
+                    getUser(qualification.username)
+                    qualificationScreenLoading = false
+                    println("Edited user qualification")
+                }
+
+                override fun onFailure(call: Call<QualificationResponse>, t: Throwable) {
+                    println("Failed to edit user qualification")
+                }
+            })
+        }
+    }
+
+    // Function to add or remove a user's experience
+    fun manageExperience(
         experience: Experience
     ) {
         viewModelScope.launch {
-            val call: Call<ExperienceResponse> = RetrofitInstance.apiService.addExperience(experience)
+            val call: Call<ExperienceResponse> = RetrofitInstance.apiService.manageExperience(experience)
             call.enqueue(object: Callback<ExperienceResponse> {
                 override fun onResponse(
                     call: Call<ExperienceResponse>,
@@ -272,7 +284,28 @@ class HomeViewModel: ViewModel() {
                     println("Failed to add user experience")
                 }
             })
+        }
+    }
 
+    // Function to edit a user's experience
+    fun editExperience(
+        experience: Experience
+    ) {
+        viewModelScope.launch {
+            val call: Call<ExperienceResponse> = RetrofitInstance.apiService.editExperience(experience)
+            call.enqueue(object: Callback<ExperienceResponse> {
+                override fun onResponse(
+                    call: Call<ExperienceResponse>,
+                    response: Response<ExperienceResponse>
+                ) {
+                    getUser(experience.username)
+                    println("Edited user experience")
+                }
+
+                override fun onFailure(call: Call<ExperienceResponse>, t: Throwable) {
+                    println("Failed to add user experience")
+                }
+            })
         }
     }
 
@@ -327,7 +360,6 @@ class HomeViewModel: ViewModel() {
         jobIds: JobIDs
     ) {
         viewModelScope.launch {
-//            bookmarksScreenLoading = true
             val call: Call<Jobs> = RetrofitInstance.apiService.getSpecificJobs(jobIds)
             call.enqueue(object: Callback<Jobs> {
                 override fun onResponse(
@@ -355,7 +387,6 @@ class HomeViewModel: ViewModel() {
         jobIds: JobIDs
     ) {
         viewModelScope.launch {
-//            applicationsScreenLoading = true
             val call: Call<Jobs> = RetrofitInstance.apiService.getSpecificJobs(jobIds)
             call.enqueue(object: Callback<Jobs> {
                 override fun onResponse(
@@ -377,4 +408,5 @@ class HomeViewModel: ViewModel() {
             })
         }
     }
+
 }

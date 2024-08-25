@@ -14,7 +14,6 @@ import com.example.inventumopus.datamodels.QualificationResponse
 import com.example.inventumopus.datamodels.User
 import com.example.inventumopus.datamodels.UserCreation
 import com.example.inventumopus.datamodels.UserCreationResponse
-import com.example.inventumopus.datamodels.Username
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -37,11 +36,17 @@ interface ApiInterface {
     @POST("create_user")
     fun createUser(@Body data: UserCreation): Call<UserCreationResponse>
 
-    @POST("add_experience")
-    fun addExperience(@Body data: Experience): Call<ExperienceResponse>
+    @POST("manage_experience")
+    fun manageExperience(@Body data: Experience): Call<ExperienceResponse>
 
-    @POST("add_qualifications")
-    fun addQualification(@Body data: Qualification): Call<QualificationResponse>
+    @POST("edit_experience")
+    fun editExperience(@Body data: Experience): Call<ExperienceResponse>
+
+    @POST("manage_qualifications")
+    fun manageQualification(@Body data: Qualification): Call<QualificationResponse>
+
+    @POST("edit_qualification")
+    fun editQualification(@Body data: Qualification): Call<QualificationResponse>
 
     @POST("manage_bookmark")
     fun manageBookmark(@Body data: Bookmark): Call<BookmarkResponse>
