@@ -1,6 +1,7 @@
 package com.example.inventumopus.ui.screens
 
 import InformationModal
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,13 +9,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +42,7 @@ import androidx.navigation.NavHostController
 import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.R
 import com.example.inventumopus.ui.GoogleFonts
+import com.example.inventumopus.ui.theme.Orange1
 
 
 @Composable
@@ -63,12 +68,24 @@ fun SignInScreen (
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Image
+            Column (
+                modifier = Modifier.size(250.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.io_logo),
+                    contentDescription = "logo"
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            // Screen Title
             Text(
                 text = "Sign In",
                 fontFamily = prata,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = 32.sp
             )
+            Spacer(modifier = Modifier.height(20.dp))
 
             Column(
                 modifier = Modifier
@@ -76,41 +93,31 @@ fun SignInScreen (
                     .padding(horizontal = 30.dp)
             ) {
                 // Username
-                Text(
-                    text = "Username",
-                    fontFamily = raleway,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Left,
-//                    color = Color.DarkGray
-                )
                 SignInFields(
                     query = username,
                     onQueryChange = { username = it },
                     leadingIcon = Icons.Default.Person,
-                    placeholderText = "Username"
+                    fieldName = "Username"
                 )
 
                 Spacer(modifier = Modifier.height(25.dp))
 
                 // Password
-                Text(
-                    text = "Password",
-                    fontFamily = raleway,
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Left,
-//                    color = Color.DarkGray
-                )
                 SignInFields(
                     query = password,
                     onQueryChange = { password = it },
                     leadingIcon = Icons.Default.Warning,
-                    placeholderText = "Password",
+                    fieldName = "Password",
                     visualTransformation = PasswordVisualTransformation()
                 )
             }
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            OutlinedButton(
+            Button(
+                modifier = Modifier
+                    .height(48.dp)
+                    .width(180.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Orange1),
                 onClick = {
                     viewModel.getUser(username)
                     if (currentUser != null) {
@@ -122,12 +129,16 @@ fun SignInScreen (
                             message = "Username or Password is incorrect"
                             showDialog = true
                         }
+                    } else {
+                        dialogTitle = "Login Failed!"
+                        message = "Username or Password is incorrect"
+                        showDialog = true
                     }
                 }) {
                 Text(
                     text = "Sign In",
-                    fontFamily = poppins,
-//                    color = Color.DarkGray
+                    fontFamily = raleway,
+                    fontWeight = FontWeight.W500
                 )
             }
             InformationModal(
@@ -145,7 +156,7 @@ fun SignInFields(
     query: String,
     onQueryChange: (String) -> Unit,
     leadingIcon: ImageVector,
-    placeholderText: String,
+    fieldName: String,
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
@@ -163,9 +174,9 @@ fun SignInFields(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp),
-        placeholder = { Text(text = placeholderText, fontFamily = raleway, fontSize = 13.sp) },
+//        placeholder = { Text(text = fieldName, fontFamily = raleway, fontSize = 13.sp) },
         leadingIcon = {
-            if (placeholderText == "Password") {
+            if (fieldName == "Password") {
                 Icon(painter = painterResource(R.drawable.password), contentDescription = "Password")
             } else {
                 Icon(imageVector = leadingIcon, contentDescription = "Sign in/up field")
@@ -180,6 +191,7 @@ fun SignInFields(
         },
         singleLine = true,
         visualTransformation = visualTransformation,
-        textStyle = TextStyle(fontFamily = raleway)
+        textStyle = TextStyle(fontFamily = raleway),
+        label = { Text(text = fieldName, fontFamily = raleway, fontSize = 13.sp) }
     )
 }

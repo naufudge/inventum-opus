@@ -85,19 +85,20 @@ fun HomeScreen (
                     text = "Welcome,",
                     fontFamily = raleway
                 )
-                // Displays username if logged in, else display "Guest"
+                Spacer(modifier = Modifier.height(4.dp))
+                // Displays username if logged in, else displays "Guest"
                 if (isLoggedIn) {
                     Text (
                         text = user?.username!!.uppercase(),
                         fontSize = 30.sp,
-                        fontFamily = raleway,
+                        fontFamily = prata,
                         fontWeight = FontWeight.W700
                     )
                 } else {
                     Text (
                         text = "Guest",
                         fontSize = 30.sp,
-                        fontFamily = raleway,
+                        fontFamily = prata,
                         fontWeight = FontWeight.W700
                     )
                 }
@@ -210,6 +211,8 @@ fun PopularCategoryCard(item: Category) {
             Text(
                 text = item.title,
                 fontSize = 13.sp,
+                fontFamily = raleway,
+                fontWeight = FontWeight.SemiBold
             )
         }
     }

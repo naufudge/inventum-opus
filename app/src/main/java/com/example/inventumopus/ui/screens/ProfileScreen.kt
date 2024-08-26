@@ -51,19 +51,18 @@ fun ProfileScreen (
         viewModel.getUser(viewModel.currentUser?.username!!)
     }
     val currentUser = viewModel.currentUser
-
-    Column (
-        modifier = Modifier
-            .padding(
-                top = 30.dp,
-                start = 20.dp,
-                end = 20.dp,
-                bottom = 20.dp
-            )
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-    ) {
-        if (isLoggedIn) {
+    if (isLoggedIn) {
+        Column (
+            modifier = Modifier
+                .padding(
+                    top = 30.dp,
+                    start = 20.dp,
+                    end = 20.dp,
+                    bottom = 20.dp
+                )
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
             // Settings button
             Row (
                 modifier = Modifier
@@ -72,7 +71,7 @@ fun ProfileScreen (
             ) {
                 CustomDropdownMenu(viewModel)
             }
-            
+
             // Profile Pic
             Row (
                 modifier = Modifier
@@ -157,11 +156,20 @@ fun ProfileScreen (
                     )
                 }
             }
-        } else {
+        }
+    } else {
+        Column (
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center
+        ) {
             LoggedOutScreen(navHostController)
         }
     }
 }
+
+
 
 @Composable
 fun ProfileCard(
@@ -219,12 +227,11 @@ fun LoggedOutScreen(
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Please sign in or sign up to view your profile and apply for your dream job!",
             fontFamily = poppins,
             fontSize = 13.sp,
-//            color = Color.Gray,
             textAlign = TextAlign.Center,
             lineHeight = 21.sp
         )
