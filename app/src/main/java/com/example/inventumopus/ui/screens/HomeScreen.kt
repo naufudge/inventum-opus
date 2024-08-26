@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.inventumopus.HomeViewModel
-import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.R
+import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.ui.GoogleFonts
 import com.example.inventumopus.ui.components.JobListingCard
 import com.example.inventumopus.ui.components.Loading
@@ -99,9 +101,39 @@ fun HomeScreen (
                         fontWeight = FontWeight.W700
                     )
                 }
-
                 Spacer(modifier = Modifier.height(20.dp))
             }
+            if (isLoggedIn) {
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Card (
+                        modifier = Modifier
+                            .size(50.dp)
+                    ) {
+                        Column (
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable {
+
+                                },
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(35.dp),
+                                imageVector = Icons.Outlined.Notifications,
+                                contentDescription = "notifications"
+                            )
+                        }
+
+                    }
+
+                }
+            }
+
+
         }
 
         // Categories Row

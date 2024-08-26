@@ -56,8 +56,6 @@ class HomeViewModel: ViewModel() {
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
-    private val _isSearching = MutableStateFlow(false)
-    val isSearching = _isSearching.asStateFlow()
 
     private val _jobs = MutableStateFlow(jobsData.value)
     val jobs = searchText
@@ -123,6 +121,14 @@ class HomeViewModel: ViewModel() {
     fun setSignInStatus(status: Boolean) {
         viewModelScope.launch {
             _signedIn.value = status
+        }
+    }
+
+    // Function to update user logged in status
+    fun userSignOut() {
+        viewModelScope.launch {
+            currentUser = null
+            _signedIn.value = false
         }
     }
 

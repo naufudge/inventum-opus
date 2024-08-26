@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +37,7 @@ import coil.size.Size
 import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.R
 import com.example.inventumopus.ui.Screen
+import com.example.inventumopus.ui.components.CustomDropdownMenu
 
 
 @Composable
@@ -67,18 +64,13 @@ fun ProfileScreen (
             .verticalScroll(rememberScrollState()),
     ) {
         if (isLoggedIn) {
-            
             // Settings button
             Row (
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                IconButton(
-                    onClick = { /*TODO*/ }
-                ) {
-                    Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
-                }
+                CustomDropdownMenu(viewModel)
             }
             
             // Profile Pic
@@ -94,7 +86,7 @@ fun ProfileScreen (
                         .width(200.dp),
                     model = ImageRequest
                         .Builder(LocalContext.current)
-                        .data("https://i.pinimg.com/736x/81/1b/d2/811bd2ba1518d33349ea863931da7e9f.jpg")
+                        .data("https://raw.githubusercontent.com/naufudge/dhaageenaa/main/public/assets/images/pp_placeholder.png?token=GHSAT0AAAAAACWIXQYRSDF67DQYOVEWPDWAZWMEDMA")
                         .size(Size.ORIGINAL)
                         .build(),
                     contentDescription = null
