@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
@@ -21,9 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,14 +28,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import coil.size.Size
+import androidx.navigation.NavOptions
 import com.example.inventumopus.HomeViewModel
 import com.example.inventumopus.R
 import com.example.inventumopus.ui.Screen
 import com.example.inventumopus.ui.components.CustomDropdownMenu
 
+val navOptions = NavOptions.Builder()
+    .setEnterAnim(android.R.anim.slide_in_left)
+    .setExitAnim(android.R.anim.slide_out_right)
+    .setPopEnterAnim(android.R.anim.slide_in_left)
+    .setPopExitAnim(android.R.anim.slide_out_right)
+    .build()
 
 @Composable
 fun ProfileScreen (
@@ -114,7 +115,7 @@ fun ProfileScreen (
                         text = "Experience",
                         icon = R.drawable.work_bag_svgrepo_com,
                         onClick = {
-                            navHostController.navigate(Screen.Experience.route)
+                            navHostController.navigate(Screen.Experience.route, navOptions)
                         }
                     )
 
@@ -124,7 +125,7 @@ fun ProfileScreen (
                         icon = R.drawable.graduate,
                         width = 28.dp,
                         onClick = {
-                            navHostController.navigate(Screen.Qualifications.route)
+                            navHostController.navigate(Screen.Qualifications.route, navOptions)
                         }
                     )
                 }

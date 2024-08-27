@@ -14,5 +14,9 @@ val Orange1 = Color(0xFFE19000)
 val Orange2 = Color(0xFFFFC257)
 val Orange3 = Color(0xFFFFDDA2)
 
+val pendingColor = Color(0xFFFFF9C4)
+val rejectColor = Color(0xFFFFCDD2)
+val acceptColor = Color(0xFFC8E6C9)
+
 val Gold1 = Color(0xFFEAC335)
 val Gold2 = Color(0xFFD9B236)

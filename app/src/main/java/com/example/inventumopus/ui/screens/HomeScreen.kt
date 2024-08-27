@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,10 @@ import com.example.inventumopus.datamodels.Job
 import com.example.inventumopus.ui.GoogleFonts
 import com.example.inventumopus.ui.components.JobListingCard
 import com.example.inventumopus.ui.components.Loading
+import com.example.inventumopus.ui.theme.acceptColor
+import com.example.inventumopus.ui.theme.pendingColor
+import com.example.inventumopus.ui.theme.rejectColor
+import kotlin.random.Random
 
 val font = GoogleFonts()
 val prata = font.Prata
@@ -193,7 +198,7 @@ fun PopularCategoryCard(item: Category) {
             .size(width = 125.dp, height = 125.dp)
             .clickable {
                 // handle click here
-                // navHostController.navigate("search")
+
             }
 
     ) {
@@ -222,25 +227,47 @@ fun PopularCategoryCard(item: Category) {
 fun RecentListings(
     navHostController: NavHostController,
     viewModel: HomeViewModel,
-    jobs: List<Job>
+    jobs: List<Job>,
+    homeScreen: Boolean = true
 ) {
     val isLoading by viewModel::homeScreenLoading
 
-    if (!isLoading) {
-        LazyColumn (
+    val statusObjects = listOf(Status.Pending, Status.Reject, Status.Accept)
+
+    if (!homeScreen) {
+        Column (
             modifier = Modifier
                 .fillMaxWidth(),
-            contentPadding = PaddingValues(7.dp),
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            itemsIndexed(jobs) { _, job ->
-                JobListingCard(navHostController = navHostController, jobItem = job, viewModel = viewModel)
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+            JobApplicationCard(navHostController = navHostController, jobItem = jobs[0], viewModel = viewModel, status = statusObjects[1])
+            Spacer(modifier = Modifier.height(24.dp))
+            JobApplicationCard(navHostController = navHostController, jobItem = jobs[1], viewModel = viewModel, status = statusObjects[2])
+            Spacer(modifier = Modifier.height(24.dp))
         }
     } else {
-        Loading()
-    }
+        if (!isLoading) {
+            LazyColumn (
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(7.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
 
+            ) {
+                itemsIndexed(jobs) { _, job ->
+                    JobListingCard(navHostController = navHostController, jobItem = job, viewModel = viewModel)
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+            }
+        } else {
+            Loading()
+        }
+    }
+}
+
+sealed class Status(val status: String, val colour: Color) {
+    data object Pending: Status(status = "Pending", colour = pendingColor)
+    data object Reject: Status(status = "Rejected", colour = rejectColor)
+    data object Accept: Status(status = "Accepted", colour = acceptColor)
 }
