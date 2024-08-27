@@ -42,7 +42,7 @@ fun CustomDropdownMenu(
                 .size(50.dp)
                 .clickable { expanded = true }
                 .padding(8.dp),
-            painter = painterResource(id = R.drawable.more_vert),
+            painter = painterResource(id = R.drawable.ellipsis),
             contentDescription = "more"
         )
         DropdownMenu(

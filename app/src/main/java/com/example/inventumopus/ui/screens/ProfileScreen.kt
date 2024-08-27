@@ -63,7 +63,7 @@ fun ProfileScreen (
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            // Settings button
+            // Options button
             Row (
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -75,20 +75,15 @@ fun ProfileScreen (
             // Profile Pic
             Row (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                horizontalArrangement = Arrangement.Center
+                    .padding(25.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
             ) {
-                AsyncImage(
+                Image(
                     modifier = Modifier
-                        .clip(CircleShape)
                         .width(200.dp),
-                    model = ImageRequest
-                        .Builder(LocalContext.current)
-                        .data("https://raw.githubusercontent.com/naufudge/dhaageenaa/main/public/assets/images/pp_placeholder.png?token=GHSAT0AAAAAACWIXQYRSDF67DQYOVEWPDWAZWMEDMA")
-                        .size(Size.ORIGINAL)
-                        .build(),
-                    contentDescription = null
+                    painter = painterResource(id = R.drawable.pp_placeholder),
+                    contentDescription = "pp"
                 )
             }
 
