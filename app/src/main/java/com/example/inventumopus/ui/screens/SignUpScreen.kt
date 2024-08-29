@@ -115,19 +115,7 @@ fun SignUpScreen (
             colors = ButtonDefaults.buttonColors(containerColor = Orange1),
             onClick = {
                 // on sign up
-                if (username == "") {
-                    dialogTitle = "Error"
-                    message = "Please fill all the fields!"
-                    showDialog = true
-                } else if (email == "") {
-                    dialogTitle = "Error"
-                    message = "Please fill all the fields!"
-                    showDialog = true
-                } else if (password == "") {
-                    dialogTitle = "Error"
-                    message = "Please fill all the fields!"
-                    showDialog = true
-                } else if (passwordConfirm == "") {
+                if (username == "" || email == "" || password == "" || passwordConfirm == "") {
                     dialogTitle = "Error"
                     message = "Please fill all the fields!"
                     showDialog = true
@@ -141,9 +129,10 @@ fun SignUpScreen (
                             )
                         )
 
-                        // dialogTitle = "Success"
-                        // message = "All correct!"
-                        // showDialog = true
+                        dialogTitle = "Success"
+                        message = "User created successfully. You can sign in now!"
+                        showDialog = true
+                        navHostController.navigate("signin")
                     } else {
                         dialogTitle = "Error"
                         message = "Password does not match!"

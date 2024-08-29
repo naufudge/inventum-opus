@@ -68,9 +68,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
-                var selectedItemIndex by rememberSaveable {
-                    mutableStateOf(0)
-                }
+                var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
                 Surface {
                     Scaffold (

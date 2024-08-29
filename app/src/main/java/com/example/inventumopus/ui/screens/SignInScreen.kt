@@ -35,7 +35,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -57,8 +56,8 @@ fun SignInScreen (
     var password by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf("") }
-    var dialogTitle by remember { mutableStateOf("") }
+    val message by remember { mutableStateOf("") }
+    val dialogTitle by remember { mutableStateOf("") }
 
     if (isLoggedIn) {
         navHostController.navigate("profile")
@@ -120,20 +119,16 @@ fun SignInScreen (
                 colors = ButtonDefaults.buttonColors(containerColor = Orange1),
                 onClick = {
                     viewModel.getUser(username)
-                    if (currentUser != null) {
-                        if (currentUser.username == username && currentUser.password == password) {
-                            viewModel.setSignInStatus(true)
-                            navHostController.navigate("profile")
-                        } else {
-                            dialogTitle = "Login Failed!"
-                            message = "Username or Password is incorrect"
-                            showDialog = true
-                        }
-                    } else {
-                        dialogTitle = "Login Failed!"
-                        message = "Username or Password is incorrect"
-                        showDialog = true
+                    if (currentUser?.username == username && currentUser.password == password) {
+                        viewModel.setSignInStatus(true)
+                        navHostController.navigate("profile")
                     }
+//                    } else {
+//                        dialogTitle = "Login Failed!"
+//                        message = "Username or Password is incorrect"
+//                        showDialog = true
+//                    }
+
                 }) {
                 Text(
                     text = "Sign In",

@@ -83,8 +83,8 @@ class HomeViewModel: ViewModel() {
     private val _userAppliedJobs : MutableStateFlow<List<Job>> = MutableStateFlow(listOf())
     var userAppliedJobs : StateFlow<List<Job>> = _userAppliedJobs
 
+    private var _currentUser by mutableStateOf<User?>(value = null)
     var currentUser by mutableStateOf<User?>(value = null)
-        private set
 
     init {
         getJobsData()
@@ -188,9 +188,7 @@ class HomeViewModel: ViewModel() {
             call.enqueue(object: Callback<UserCreationResponse> {
                 override fun onResponse(call: Call<UserCreationResponse>, response: Response<UserCreationResponse>) {
                     if (response.isSuccessful) {
-                        setSignInStatus(true)
                         getUser(user.username)
-
                         println("Created User Successfully!")
                     } else {
                         println("There was an error when creating the user.")
@@ -205,7 +203,8 @@ class HomeViewModel: ViewModel() {
 
     // Function to get a user's details
     fun getUser(
-        username: String
+        username: String,
+        login: Boolean = false
     ) {
         viewModelScope.launch {
             val call: Call<User> = RetrofitInstance.apiService.getUserByUsername(username)
@@ -213,7 +212,8 @@ class HomeViewModel: ViewModel() {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful) {
                         // handle successful get_user request
-                        currentUser = response.body()
+                        _currentUser = response.body()
+                        currentUser = _currentUser
                     } else {
                         println("There was an error when getting user.")
                     }
