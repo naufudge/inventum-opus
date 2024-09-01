@@ -138,8 +138,6 @@ fun HomeScreen (
 
                 }
             }
-
-
         }
 
         // Categories Row
@@ -235,16 +233,16 @@ fun RecentListings(
     val statusObjects = listOf(Status.Pending, Status.Reject, Status.Accept)
 
     if (!homeScreen) {
-        Column (
+        LazyColumn (
             modifier = Modifier
                 .fillMaxWidth(),
+            contentPadding = PaddingValues(7.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
-            JobApplicationCard(navHostController = navHostController, jobItem = jobs[0], viewModel = viewModel, status = statusObjects[1])
-            Spacer(modifier = Modifier.height(24.dp))
-            JobApplicationCard(navHostController = navHostController, jobItem = jobs[1], viewModel = viewModel, status = statusObjects[2])
-            Spacer(modifier = Modifier.height(24.dp))
+            itemsIndexed(jobs) { _, job ->
+                JobApplicationCard(navHostController = navHostController, jobItem = job, viewModel = viewModel, status = statusObjects[0])
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     } else {
         if (!isLoading) {
