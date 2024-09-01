@@ -56,8 +56,8 @@ fun SignInScreen (
     var password by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
-    val message by remember { mutableStateOf("") }
-    val dialogTitle by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
+    var dialogTitle by remember { mutableStateOf("") }
 
     if (isLoggedIn) {
         navHostController.navigate("profile")
@@ -122,6 +122,10 @@ fun SignInScreen (
                     if (currentUser?.username == username && currentUser.password == password) {
                         viewModel.setSignInStatus(true)
                         navHostController.navigate("profile")
+                    } else {
+                        dialogTitle = "Login Failed!"
+                        message = "Username or Password is incorrect"
+                        showDialog = true
                     }
 //                    } else {
 //                        dialogTitle = "Login Failed!"
