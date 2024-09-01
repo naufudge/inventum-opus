@@ -1,7 +1,11 @@
 # Inventum Opus - README
 
+<img src="app/public/icon.png?raw=true" width="175" height="175">
+
 ## Description
 This mobile application, “Inventum Opus”, which means finding work in Latin, is an app that can be used to find and apply for jobs. After creating your résumé in the app, you can apply for a job with a simple click of a button. Based on the user résumé, the app will also try to recommend job positions as well. Users can also track the status of the jobs that they applied to.
+
+<img src="app/public/home-screen.png?raw=true" height="500">
 
 ## Tools / Software
 ### System Requirements
